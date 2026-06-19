@@ -115,6 +115,7 @@ debian:bookworm-slim
   ┌────┴──────────┐
   │               │
   │ build-essential│
+  │ locales (UTF-8)│
   │ RTK (deb)     │
   │ mise, gh      │
   │ rg, tree      │
