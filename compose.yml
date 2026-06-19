@@ -1,0 +1,22 @@
+services:
+  workspace:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    volumes:
+      - .:/workspace
+      - claude-home:/home/agent/.claude
+      - codex-home:/home/agent/.codex
+      - mise-data:/home/agent/.local/share/mise
+    env_file:
+      - .env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    working_dir: /workspace
+    stdin_open: true
+    tty: true
+
+volumes:
+  claude-home:
+  codex-home:
+  mise-data:
