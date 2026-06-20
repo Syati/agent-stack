@@ -55,6 +55,7 @@ RUN curl -fsSL "https://github.com/k1LoW/git-wt/releases/download/v${GIT_WT_VERS
 
 # Non-root user
 RUN useradd -m -s /bin/bash agent
+RUN echo 'eval "$(git wt --init bash)"' >> /home/agent/.bashrc
 USER agent
 WORKDIR /home/agent
 
