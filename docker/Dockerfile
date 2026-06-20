@@ -66,6 +66,9 @@ ENV PATH="/home/agent/.local/bin:${PATH}"
 # Claude Code
 RUN curl -fsSL https://claude.ai/install.sh | bash
 
+# entire (AI session capture for git)
+RUN curl -fsSL https://entire.io/install.sh | bash
+
 # Codex
 RUN case "${TARGETARCH}" in \
       amd64) CODEX_ARCH="x86_64" ;; \
