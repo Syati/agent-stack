@@ -2,6 +2,7 @@ FROM debian:trixie-slim
 
 ARG RTK_VERSION=0.42.4
 ARG CODEX_VERSION=0.141.0
+ARG GIT_WT_VERSION=0.29.0
 ARG TARGETARCH
 
 ENV LANG=C.UTF-8
@@ -45,6 +46,12 @@ RUN case "${TARGETARCH}" in \
          tar xzf "/tmp/${RTK_PKG}" -C /usr/local/bin; \
        fi \
     && rm -f "/tmp/${RTK_PKG}"
+
+# git-wt
+RUN curl -fsSL "https://github.com/k1LoW/git-wt/releases/download/v${GIT_WT_VERSION}/git-wt_${GIT_WT_VERSION}-1_${TARGETARCH}.deb" \
+      -o /tmp/git-wt.deb \
+    && dpkg -i /tmp/git-wt.deb \
+    && rm /tmp/git-wt.deb
 
 # Non-root user
 RUN useradd -m -s /bin/bash agent
