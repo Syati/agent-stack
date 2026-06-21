@@ -30,6 +30,10 @@ docker compose exec -it agent bash
 
 Use `docker compose exec` (not `docker attach`). Each `exec` spawns an independent process, so multiple agents can run in parallel without stdin conflicts.
 
+## Container User
+
+Runs as non-root user `agent` (home: `/home/agent`, shell: `zsh`). Working directory is `/workspace`.
+
 ## What's Inside
 
 | Tool | Description |
