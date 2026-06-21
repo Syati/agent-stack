@@ -1,4 +1,4 @@
-eval "$(git wt --init bash)"
+eval "$(git wt --init "${ZSH_VERSION:+zsh}" "${ZSH_VERSION:-bash}")"
 
 HOST_IP=$(getent hosts host.docker.internal 2>/dev/null | awk '{print $1}')
 if [ -n "$HOST_IP" ]; then

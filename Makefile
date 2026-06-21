@@ -14,7 +14,7 @@ dev: ## Start the workspace container
 	@$(DC) up -d
 
 shell: ## Open a shell in the workspace container
-	@$(DC) exec workspace bash
+	@$(DC) exec workspace zsh
 
 claude: ## Run Claude Code in the workspace container
 	@$(DC) exec workspace claude

@@ -22,6 +22,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ripgrep \
     tree \
     unzip \
+    zsh \
+    zsh-autosuggestions \
+    zsh-syntax-highlighting \
     && sed -i 's/^# *\(C.UTF-8\)/\1/' /etc/locale.gen \
     && locale-gen \
     && rm -rf /var/lib/apt/lists/*
@@ -65,8 +68,9 @@ RUN curl -fsSL "https://github.com/k1LoW/git-wt/releases/download/v${GIT_WT_VERS
     && rm /tmp/git-wt.deb
 
 # Non-root user
-RUN useradd -m -s /bin/bash agent
+RUN useradd -m -s /bin/zsh agent
 COPY docker/profile.sh /home/agent/.profile.sh
+COPY docker/.zshrc /home/agent/.zshrc
 RUN echo '. ~/.profile.sh' >> /home/agent/.bashrc
 USER agent
 WORKDIR /home/agent
