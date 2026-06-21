@@ -37,6 +37,9 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
     && apt-get update && apt-get install -y --no-install-recommends gh \
     && rm -rf /var/lib/apt/lists/*
 
+# starship prompt
+RUN curl -fsSL https://starship.rs/install.sh | sh -s -- -y
+
 # RTK
 RUN case "${TARGETARCH}" in \
       amd64) RTK_PKG="rtk_${RTK_VERSION}-1_amd64.deb" ;; \
