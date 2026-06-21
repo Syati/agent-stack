@@ -70,6 +70,9 @@ RUN curl -fsSL "https://github.com/k1LoW/git-wt/releases/download/v${GIT_WT_VERS
     && dpkg -i /tmp/git-wt.deb \
     && rm /tmp/git-wt.deb
 
+# Scripts
+COPY docker/bin/chrome-connect /usr/local/bin/chrome-connect
+
 # Non-root user
 RUN useradd -m -s /bin/zsh agent
 COPY docker/profile.sh /home/agent/.profile.sh

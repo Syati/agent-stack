@@ -1,0 +1,21 @@
+#!/bin/bash
+HOST_IP=$(getent hosts host.docker.internal 2>/dev/null | awk '{print $1}')
+if [ -z "$HOST_IP" ]; then
+  echo "host.docker.internal not found" >&2
+  exit 1
+fi
+
+CHROME_PORT="${CHROME_REMOTE_PORT:-9222}"
+CDP_URL="http://${HOST_IP}:${CHROME_PORT}"
+
+WS_URL=$(curl -sf -H "Host: localhost" "$CDP_URL/json/version" \
+  | jq -r .webSocketDebuggerUrl \
+  | sed "s|ws://localhost|ws://${HOST_IP}:${CHROME_PORT}|")
+
+if [ -n "$WS_URL" ] && [ "$WS_URL" != "null" ]; then
+  echo "CHROME_WS_URL=$WS_URL"
+  exec agent-browser connect "$WS_URL"
+else
+  echo "Failed to connect to Chrome at $CDP_URL" >&2
+  exit 1
+fi
