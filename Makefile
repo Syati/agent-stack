@@ -1,6 +1,8 @@
 .DEFAULT_GOAL := help
 
 DC := docker compose
+-include .env
+CHROME_REMOTE_PORT ?= 9222
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
@@ -22,7 +24,7 @@ codex: ## Run Codex in the workspace container
 
 chrome: ## Start Chrome with remote debugging for agent-browser
 	/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \
-		--remote-debugging-port=9222 \
+		--remote-debugging-port=$(CHROME_REMOTE_PORT) \
 		--remote-debugging-address=0.0.0.0 \
 		--user-data-dir=$(HOME)/.chrome-agent
 
