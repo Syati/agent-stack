@@ -4,13 +4,7 @@ AI agent development container with [Claude Code](https://claude.ai/code), [Code
 
 ## Quick Start
 
-Pull from ghcr.io:
-
-```bash
-docker run -it -v $(pwd):/workspace --env-file .env ghcr.io/syati/agent-stack bash
-```
-
-Or use in your project's `compose.yml`:
+Add to your project's `compose.yml`:
 
 ```yaml
 services:
@@ -22,9 +16,16 @@ services:
       - .env
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    stdin_open: true
-    tty: true
 ```
+
+Start the container and connect:
+
+```bash
+docker compose up -d
+docker compose exec -it agent bash
+```
+
+Use `docker compose exec` (not `docker attach`). Each `exec` spawns an independent process, so multiple agents can run in parallel without stdin conflicts.
 
 ## What's Inside
 

@@ -89,4 +89,4 @@ USER agent
 RUN pip3 install --user --break-system-packages apm-cli
 
 WORKDIR /workspace
-CMD ["bash"]
+CMD ["sleep", "infinity"]

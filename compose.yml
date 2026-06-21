@@ -13,8 +13,6 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     working_dir: /workspace
-    stdin_open: true
-    tty: true
 
 volumes:
   claude-home:
