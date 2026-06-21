@@ -84,10 +84,10 @@ make clean   # stop and remove
   --user-data-dir=$HOME/.chrome-agent
 ```
 
-**Container side** (`CHROME_WS_URL` is set automatically by the entrypoint when Chrome is running):
+**Container side** (run `chrome-connect` to resolve WebSocket URL and connect):
 
 ```bash
-agent-browser connect "$CHROME_WS_URL"
+chrome-connect
 ```
 
 Port is configurable via `CHROME_REMOTE_PORT` in `.env` (default: 9222).

@@ -28,10 +28,7 @@ chrome: ## Start Chrome with remote debugging for agent-browser
 		--remote-debugging-address=0.0.0.0 \
 		--user-data-dir=$(HOME)/.chrome-agent
 
-ab-connect: ## Connect agent-browser to host Chrome (run inside container)
-	agent-browser connect "$$CHROME_WS_URL"
-
 clean: ## Stop containers and remove volumes
 	@$(DC) down -v
 
-.PHONY: help build dev shell claude codex chrome ab-connect clean
+.PHONY: help build dev shell claude codex chrome clean
