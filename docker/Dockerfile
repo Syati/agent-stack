@@ -66,8 +66,8 @@ RUN curl -fsSL "https://github.com/k1LoW/git-wt/releases/download/v${GIT_WT_VERS
 
 # Non-root user
 RUN useradd -m -s /bin/bash agent
-RUN echo 'eval "$(git wt --init bash)"' >> /home/agent/.bashrc
-COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY docker/profile.sh /home/agent/.profile.sh
+RUN echo '. ~/.profile.sh' >> /home/agent/.bashrc
 USER agent
 WORKDIR /home/agent
 
@@ -101,5 +101,4 @@ USER agent
 RUN pip3 install --user --break-system-packages apm-cli
 
 WORKDIR /workspace
-ENTRYPOINT ["entrypoint.sh"]
 CMD ["sleep", "infinity"]

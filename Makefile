@@ -5,7 +5,7 @@ DC := docker compose
 CHROME_REMOTE_PORT ?= 9222
 
 help: ## Show this help
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' Makefile | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
 
 build: ## Build the workspace image
 	$(DC) build
@@ -29,9 +29,7 @@ chrome: ## Start Chrome with remote debugging for agent-browser
 		--user-data-dir=$(HOME)/.chrome-agent
 
 ab-connect: ## Connect agent-browser to host Chrome (run inside container)
-	@WS=$$(curl -s -H "Host: localhost" $$CHROME_CDP_URL/json/version | jq -r .webSocketDebuggerUrl \
-		| sed "s|ws://localhost|ws://$${CHROME_CDP_URL#http://}|") && \
-	agent-browser connect "$$WS"
+	agent-browser connect "$$CHROME_WS_URL"
 
 clean: ## Stop containers and remove volumes
 	$(DC) down -v
