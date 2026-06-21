@@ -13,13 +13,22 @@ services:
     volumes:
       - .:/workspace
       - /var/run/docker.sock:/var/run/docker.sock  # host Docker access
+      - claude-home:/home/agent/.claude
+      - codex-home:/home/agent/.codex
+      - mise-data:/home/agent/.local/share/mise
     env_file:
       - .env
     extra_hosts:
       - "host.docker.internal:host-gateway"
+
+volumes:
+  claude-home:
+  codex-home:
+  mise-data:
 ```
 
-Mounting the Docker socket allows the container to control host Docker (`docker compose run`, `docker exec`, etc.). Remove the socket line if not needed.
+- **Docker socket**: allows the container to control host Docker (`docker compose run`, `docker exec`, etc.). Remove if not needed.
+- **Named volumes**: persist Claude Code/Codex session history and mise-installed runtimes across container recreations. Only cleared by `docker compose down -v`.
 
 Start the container and connect:
 
