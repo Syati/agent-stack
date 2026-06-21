@@ -81,10 +81,6 @@ agent-browser stream enable --port 9223
 # In container, agent-browser CLI connects to host
 ```
 
-## Architecture
-
-See [architecture.md](architecture.md) for design details.
-
 ## License
 
 MIT
