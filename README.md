@@ -54,6 +54,8 @@ GITHUB_PERSONAL_ACCESS_TOKEN=ghp_...
 
 ## Local Build
 
+See [compose.yml](compose.yml) for a working example.
+
 ```bash
 git clone https://github.com/Syati/agent-stack.git
 cd agent-stack
