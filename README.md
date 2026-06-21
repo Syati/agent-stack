@@ -75,13 +75,17 @@ make clean   # stop and remove
 
 [agent-browser](https://github.com/vercel-labs/agent-browser) is pre-installed in the container. Start Chrome on the host with remote debugging, then connect from the container.
 
-**Host side** (start Chrome with a dedicated profile):
+**Host side** (`make chrome` or manually):
 
 ```bash
 /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \
   --remote-debugging-port=9222 \
   --remote-debugging-address=0.0.0.0 \
-  --user-data-dir=$HOME/.chrome-agent
+  --user-data-dir=$HOME/.chrome-agent \
+  --no-first-run \
+  --no-default-browser-check \
+  --password-store=basic \
+  --disable-blink-features=AutomationControlled
 ```
 
 **Container side** (run `chrome-connect` to resolve WebSocket URL and connect):
