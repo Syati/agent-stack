@@ -5,6 +5,7 @@ services:
       dockerfile: docker/Dockerfile
     volumes:
       - .:/workspace
+      - /var/run/docker.sock:/var/run/docker.sock
       - claude-home:/home/agent/.claude
       - codex-home:/home/agent/.codex
       - mise-data:/home/agent/.local/share/mise

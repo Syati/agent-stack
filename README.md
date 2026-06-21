@@ -12,11 +12,14 @@ services:
     image: ghcr.io/syati/agent-stack:latest
     volumes:
       - .:/workspace
+      - /var/run/docker.sock:/var/run/docker.sock  # host Docker access
     env_file:
       - .env
     extra_hosts:
       - "host.docker.internal:host-gateway"
 ```
+
+Docker socket をマウントすると、コンテナ内からホストの Docker を操作できます（`docker compose run`, `docker exec` 等）。不要な場合は socket の行を削除してください。
 
 Start the container and connect:
 
