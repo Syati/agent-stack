@@ -20,10 +20,18 @@ claude: ## Run Claude Code in the workspace container
 codex: ## Run Codex in the workspace container
 	$(DC) exec workspace codex
 
-ab-start: ## Start agent-browser on the host
-	agent-browser stream enable --port 9223
+chrome: ## Start Chrome with remote debugging for agent-browser
+	/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \
+		--remote-debugging-port=9222 \
+		--remote-debugging-address=0.0.0.0 \
+		--user-data-dir=$(HOME)/.chrome-agent
+
+ab-connect: ## Connect agent-browser to host Chrome (run inside container)
+	@WS=$$(curl -s -H "Host: localhost" $$CHROME_CDP_URL/json/version | jq -r .webSocketDebuggerUrl \
+		| sed "s|ws://localhost|ws://$${CHROME_CDP_URL#http://}|") && \
+	agent-browser connect "$$WS"
 
 clean: ## Stop containers and remove volumes
 	$(DC) down -v
 
-.PHONY: help build dev shell claude codex ab-start clean
+.PHONY: help build dev shell claude codex chrome ab-connect clean

@@ -73,14 +73,14 @@ make clean   # stop and remove
 
 ## agent-browser Integration
 
-[agent-browser](https://github.com/vercel-labs/agent-browser) is pre-installed in the container. Launch Chrome on the host with remote debugging, and connect from the container:
+[agent-browser](https://github.com/vercel-labs/agent-browser) is pre-installed in the container. Connect to Chrome on the host via remote debugging:
 
 ```bash
-# On host: start Chrome with remote debugging
-/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222
+# On host: start Chrome with agent profile
+make chrome
 
 # In container: connect to host Chrome
-agent-browser connect host.docker.internal:9222
+make ab-connect
 ```
 
 ## License
