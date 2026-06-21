@@ -1,6 +1,6 @@
 # agent-stack
 
-AI agent development container with [Claude Code](https://claude.ai/code), [Codex](https://github.com/openai/codex), [RTK](https://github.com/rtk-ai/rtk), [mise](https://mise.jdx.dev/), and [APM](https://github.com/microsoft/apm) pre-installed.
+AI agent development container with [Claude Code](https://claude.ai/code), [Codex](https://github.com/openai/codex), [RTK](https://github.com/rtk-ai/rtk), [mise](https://mise.jdx.dev/), [APM](https://github.com/microsoft/apm), [entire](https://entire.io), and [git-wt](https://github.com/k1LoW/git-wt) pre-installed.
 
 ## Quick Start
 
@@ -35,6 +35,8 @@ services:
 | [RTK](https://github.com/rtk-ai/rtk) | Token-optimized CLI proxy (60-90% token savings) |
 | [mise](https://mise.jdx.dev/) | Dev tool version manager |
 | [APM](https://github.com/microsoft/apm) | Agent Package Manager for MCP/skills |
+| [entire](https://entire.io) | AI session capture for git |
+| [git-wt](https://github.com/k1LoW/git-wt) | Simplified git worktree management |
 | [gh](https://cli.github.com/) | GitHub CLI |
 | [ripgrep](https://github.com/BurntSushi/ripgrep) | Fast grep (auto-used by RTK) |
 | build-essential | C/C++ compiler toolchain |
