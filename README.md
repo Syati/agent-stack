@@ -19,7 +19,7 @@ services:
       - "host.docker.internal:host-gateway"
 ```
 
-Docker socket をマウントすると、コンテナ内からホストの Docker を操作できます（`docker compose run`, `docker exec` 等）。不要な場合は socket の行を削除してください。
+Mounting the Docker socket allows the container to control host Docker (`docker compose run`, `docker exec`, etc.). Remove the socket line if not needed.
 
 Start the container and connect:
 
