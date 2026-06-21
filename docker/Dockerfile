@@ -3,6 +3,7 @@ FROM debian:trixie-slim
 ARG RTK_VERSION=0.42.4
 ARG CODEX_VERSION=0.141.0
 ARG GIT_WT_VERSION=0.29.0
+ARG AGENT_BROWSER_VERSION=0.29.0
 ARG TARGETARCH
 
 ENV LANG=C.UTF-8
@@ -46,6 +47,16 @@ RUN case "${TARGETARCH}" in \
          tar xzf "/tmp/${RTK_PKG}" -C /usr/local/bin; \
        fi \
     && rm -f "/tmp/${RTK_PKG}"
+
+# agent-browser
+RUN case "${TARGETARCH}" in \
+      amd64) AB_ARCH="x64" ;; \
+      arm64) AB_ARCH="arm64" ;; \
+      *) echo "Unsupported arch: ${TARGETARCH}" && exit 1 ;; \
+    esac \
+    && curl -fsSL "https://github.com/vercel-labs/agent-browser/releases/download/v${AGENT_BROWSER_VERSION}/agent-browser-linux-${AB_ARCH}" \
+      -o /usr/local/bin/agent-browser \
+    && chmod +x /usr/local/bin/agent-browser
 
 # git-wt
 RUN curl -fsSL "https://github.com/k1LoW/git-wt/releases/download/v${GIT_WT_VERSION}/git-wt_${GIT_WT_VERSION}-1_${TARGETARCH}.deb" \

@@ -40,6 +40,7 @@ Use `docker compose exec` (not `docker attach`). Each `exec` spawns an independe
 | [git-wt](https://github.com/k1LoW/git-wt) | Simplified git worktree management |
 | [gh](https://cli.github.com/) | GitHub CLI |
 | [ripgrep](https://github.com/BurntSushi/ripgrep) | Fast grep (auto-used by RTK) |
+| [agent-browser](https://github.com/vercel-labs/agent-browser) | Browser automation for AI agents |
 | build-essential | C/C++ compiler toolchain |
 
 ## Environment Variables
@@ -72,13 +73,14 @@ make clean   # stop and remove
 
 ## agent-browser Integration
 
-[agent-browser](https://github.com/vercel-labs/agent-browser) runs on the host OS (requires Chrome). The container connects via `host.docker.internal`:
+[agent-browser](https://github.com/vercel-labs/agent-browser) is pre-installed in the container. Launch Chrome on the host with remote debugging, and connect from the container:
 
 ```bash
-# On host
-agent-browser stream enable --port 9223
+# On host: start Chrome with remote debugging
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222
 
-# In container, agent-browser CLI connects to host
+# In container: connect to host Chrome
+agent-browser connect host.docker.internal:9222
 ```
 
 ## License
