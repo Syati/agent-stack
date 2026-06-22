@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "7d6fbb1da740",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "agent-stack.plugin.zsh"
+  ],
+  "sessions": [
+    {
+      "metadata": "/7d/6fbb1da740/0/metadata.json",
+      "transcript": "/7d/6fbb1da740/0/full.jsonl",
+      "content_hash": "/7d/6fbb1da740/0/content_hash.txt",
+      "prompt": "/7d/6fbb1da740/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 123,
+    "cache_creation_tokens": 44584,
+    "cache_read_tokens": 2985218,
+    "output_tokens": 14329,
+    "api_call_count": 77
+  }
+}

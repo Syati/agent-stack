@@ -1,0 +1,77 @@
+rtk いれてるけど rtk init してないよね
+
+---
+
+いや、agent-stack を利用したとき、dockerfile には rtk init をしていないということ
+
+---
+
+rtk init -g --codex で codex 羊毛したほうがいいよね
+
+---
+
+-g --codex だと claude も設定されるの？
+
+---
+
+plugin で     -v ${HOME}/.codex:/home/agent/.codex \ されるけど、rtk init は利用される？
+
+---
+
+はじめて agent を利用した場合 rtk init されてないので、その場合どうすればいいかな？
+
+---
+
+zshrc にかいたら？
+
+---
+
+profile のほうがいい？
+
+---
+
+bash でも profile.sh がソースされるの？
+
+---
+
+commit push
+
+---
+
+claude.md って必要？
+
+---
+
+はい
+
+---
+
+commit push
+
+---
+
+dockerfile にツールのバージョン固定してるけど、update する場合どうする？
+
+---
+
+自動で PR を出す CI にしましょうか
+
+---
+
+commit push
+
+---
+
+make の件もいれようか
+
+---
+
+make じゃなくて shell のほうがらくｚなんじゃない？
+
+---
+
+commit push
+
+---
+
+image が README では ghcr.io/syati/agent-stack:latest、plugin では tag なし ghcr.io/syati/agent-stack なので、:latest に揃えると迷いが減ります。
