@@ -1,0 +1,21 @@
+docker 内で claude とかすると、毎回 code が求められる
+
+---
+
+home で使ってない場合は？
+
+---
+
+bind mount することで、 host os 側につくられるのか
+
+---
+
+同様にして
+
+---
+
+readme は大丈夫？
+
+---
+
+shell funciton のコード例って plugin を source してでもいいじゃない？
