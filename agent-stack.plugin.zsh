@@ -1,11 +1,13 @@
 agent() {
   local env_file=${HOME}/.agent-stack.env
-  local env_arg=()
+  local env_args=()
   if [[ -f "$env_file" ]]; then
     if command -v op &>/dev/null; then
-      env_arg=(--env-file =(op inject -i "$env_file"))
+      while IFS= read -r line; do
+        [[ -n "$line" && "$line" != \#* ]] && env_args+=(-e "$line")
+      done < <(op inject -i "$env_file")
     else
-      env_arg=(--env-file "$env_file")
+      env_args=(--env-file "$env_file")
     fi
   fi
 
@@ -16,7 +18,7 @@ agent() {
     -v agent-claude-home:/home/agent/.claude \
     -v agent-codex-home:/home/agent/.codex \
     -v agent-mise-data:/home/agent/.local/share/mise \
-    ${env_arg[@]} \
+    ${env_args[@]} \
     --add-host host.docker.internal:host-gateway \
     ghcr.io/syati/agent-stack zsh
 }

@@ -54,6 +54,18 @@ Or add the function directly to your `~/.zshrc`:
 
 ```bash
 agent() {
+  local env_file=${HOME}/.agent-stack.env
+  local env_args=()
+  if [[ -f "$env_file" ]]; then
+    if command -v op &>/dev/null; then
+      while IFS= read -r line; do
+        [[ -n "$line" && "$line" != \#* ]] && env_args+=(-e "$line")
+      done < <(op inject -i "$env_file")
+    else
+      env_args=(--env-file "$env_file")
+    fi
+  fi
+
   docker run -it \
     -v $(pwd):/workspace \
     -v /var/run/docker.sock:/var/run/docker.sock \
@@ -61,7 +73,7 @@ agent() {
     -v agent-claude-home:/home/agent/.claude \
     -v agent-codex-home:/home/agent/.codex \
     -v agent-mise-data:/home/agent/.local/share/mise \
-    --env-file ${HOME}/.agent-stack.env \
+    ${env_args[@]} \
     --add-host host.docker.internal:host-gateway \
     ghcr.io/syati/agent-stack zsh
 }
@@ -91,13 +103,19 @@ Runs as non-root user `agent` (home: `/home/agent`, shell: `zsh`). Working direc
 
 ## Environment Variables
 
-Create a `.env` file:
+Create `~/.agent-stack.env` (used by the shell function):
 
 ```
-ANTHROPIC_API_KEY=sk-ant-...
-OPENAI_API_KEY=sk-...
 GITHUB_PERSONAL_ACCESS_TOKEN=ghp_...
 ```
+
+If you use [1Password CLI](https://developer.1password.com/docs/cli/), you can use `op://` references:
+
+```
+GITHUB_PERSONAL_ACCESS_TOKEN=op://Private/github-pat/credential
+```
+
+When `op` is available, references are resolved via `op inject` automatically. Without `op`, the file is passed as-is.
 
 ## Local Build
 
