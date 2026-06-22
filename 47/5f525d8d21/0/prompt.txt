@@ -31,3 +31,7 @@ profile のほうがいい？
 ---
 
 bash でも profile.sh がソースされるの？
+
+---
+
+commit push
