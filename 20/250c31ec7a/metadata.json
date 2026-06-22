@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "20250c31ec7a",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 0,
+  "files_touched": [
+    ".github/workflows/build-push.yml"
+  ],
+  "sessions": [
+    {
+      "metadata": "/20/250c31ec7a/0/metadata.json",
+      "transcript": "/20/250c31ec7a/0/full.jsonl",
+      "content_hash": "/20/250c31ec7a/0/content_hash.txt",
+      "prompt": "/20/250c31ec7a/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 4,
+    "cache_creation_tokens": 835,
+    "cache_read_tokens": 93467,
+    "output_tokens": 865,
+    "api_call_count": 2
+  }
+}

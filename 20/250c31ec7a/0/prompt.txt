@@ -1,0 +1,1 @@
+buildx failed with: ERROR: failed to build: failed to solve: failed to parse ref "ghcr.io/Syati/agent-stack": invalid reference format: repository name (Syati/agent-stack) must be lowercase
