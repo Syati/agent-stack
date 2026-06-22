@@ -1,0 +1,9 @@
+sheldon を経由したとき、.agent-stack env を 1password op で環境変数をわたしたいんだけど
+
+---
+
+これ 1passwordd 使ってない人だとバグっちゃうよね
+
+---
+
+1 ですね
