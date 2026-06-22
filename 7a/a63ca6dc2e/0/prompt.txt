@@ -133,3 +133,7 @@ readme 85 行目にのこってるよ
 ---
 
 GH_TOKEN くわえたらいいじゃない？
+
+---
+
+commit push
