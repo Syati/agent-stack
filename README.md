@@ -43,7 +43,14 @@ Use `docker compose exec` (not `docker attach`). Each `exec` spawns an independe
 
 ## Shell Function (no compose.yml needed)
 
-Add to your `~/.zshrc` to run from any project directory:
+With [sheldon](https://github.com/rossmacarthur/sheldon), add to `~/.config/sheldon/plugins.toml`:
+
+```toml
+[plugins.agent-stack]
+github = "Syati/agent-stack"
+```
+
+Or add the function directly to your `~/.zshrc`:
 
 ```bash
 agent() {
