@@ -1,0 +1,9 @@
+agent stack から git push するときって、git config が必要だよね？
+
+---
+
+そうしましょう。README にも追記して
+
+---
+
+volume で ~/ って sync できたっけ？
