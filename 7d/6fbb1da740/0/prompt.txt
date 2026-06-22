@@ -75,3 +75,7 @@ commit push
 ---
 
 image が README では ghcr.io/syati/agent-stack:latest、plugin では tag なし ghcr.io/syati/agent-stack なので、:latest に揃えると迷いが減ります。
+
+---
+
+commit push
