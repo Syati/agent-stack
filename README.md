@@ -41,6 +41,27 @@ docker compose exec -it agent bash
 
 Use `docker compose exec` (not `docker attach`). Each `exec` spawns an independent process, so multiple agents can run in parallel without stdin conflicts.
 
+## Shell Function (no compose.yml needed)
+
+Add to your `~/.zshrc` to run from any project directory:
+
+```bash
+agent() {
+  docker run -it \
+    -v $(pwd):/workspace \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v ${HOME}/.gitconfig:/home/agent/.gitconfig:ro \
+    -v agent-claude-home:/home/agent/.claude \
+    -v agent-codex-home:/home/agent/.codex \
+    -v agent-mise-data:/home/agent/.local/share/mise \
+    --env-file ${HOME}/.agent-stack.env \
+    --add-host host.docker.internal:host-gateway \
+    ghcr.io/syati/agent-stack zsh
+}
+```
+
+Multiple instances can run in parallel — each `agent` call creates a separate container. Use [git-wt](https://github.com/k1LoW/git-wt) worktrees to avoid file conflicts when multiple agents work on the same repo.
+
 ## Container User
 
 Runs as non-root user `agent` (home: `/home/agent`, shell: `zsh`). Working directory is `/workspace`.
