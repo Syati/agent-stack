@@ -1,0 +1,10 @@
+Unable to find image 'ghcr.io/syati/agent-stack:latest' locally
+docker: Error response from daemon: no matching manifest for linux/arm64/v8 in the manifest list entries: no match for platform in manifest: not found
+
+---
+
+許容できますが、もっといい方法内？
+
+---
+
+そちらにしましょうか
