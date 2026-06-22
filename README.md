@@ -14,8 +14,8 @@ services:
       - .:/workspace
       - /var/run/docker.sock:/var/run/docker.sock  # host Docker access
       - ${HOME}/.gitconfig:/home/agent/.gitconfig:ro    # git config
-      - claude-home:/home/agent/.claude
-      - codex-home:/home/agent/.codex
+      - ${HOME}/.claude:/home/agent/.claude
+      - ${HOME}/.codex:/home/agent/.codex
       - mise-data:/home/agent/.local/share/mise
     env_file:
       - .env
@@ -23,13 +23,12 @@ services:
       - "host.docker.internal:host-gateway"
 
 volumes:
-  claude-home:
-  codex-home:
   mise-data:
 ```
 
 - **Docker socket**: allows the container to control host Docker (`docker compose run`, `docker exec`, etc.). Remove if not needed.
-- **Named volumes**: persist Claude Code/Codex session history and mise-installed runtimes across container recreations. Only cleared by `docker compose down -v`.
+- **Bind mounts (`~/.claude`, `~/.codex`)**: persist auth and session data on the host. Survives `docker compose down -v`.
+- **Named volume (`mise-data`)**: persists mise-installed runtimes across container recreations. Cleared by `docker compose down -v`.
 - **gitconfig**: mounts host git config (read-only) so `git commit` and `git push` work inside the container.
 
 Start the container and connect:
@@ -50,33 +49,10 @@ With [sheldon](https://github.com/rossmacarthur/sheldon), add to `~/.config/shel
 github = "Syati/agent-stack"
 ```
 
-Or add the function directly to your `~/.zshrc`:
+Or source the plugin directly in your `~/.zshrc`:
 
 ```bash
-agent() {
-  local env_file=${HOME}/.agent-stack.env
-  local env_args=()
-  if [[ -f "$env_file" ]]; then
-    if command -v op &>/dev/null; then
-      while IFS= read -r line; do
-        [[ -n "$line" && "$line" != \#* ]] && env_args+=(-e "$line")
-      done < <(op inject -i "$env_file")
-    else
-      env_args=(--env-file "$env_file")
-    fi
-  fi
-
-  docker run -it \
-    -v $(pwd):/workspace \
-    -v /var/run/docker.sock:/var/run/docker.sock \
-    -v ${HOME}/.gitconfig:/home/agent/.gitconfig:ro \
-    -v agent-claude-home:/home/agent/.claude \
-    -v agent-codex-home:/home/agent/.codex \
-    -v agent-mise-data:/home/agent/.local/share/mise \
-    ${env_args[@]} \
-    --add-host host.docker.internal:host-gateway \
-    ghcr.io/syati/agent-stack zsh
-}
+source /path/to/agent-stack/agent-stack.plugin.zsh
 ```
 
 Multiple instances can run in parallel — each `agent` call creates a separate container. Use [git-wt](https://github.com/k1LoW/git-wt) worktrees to avoid file conflicts when multiple agents work on the same repo.

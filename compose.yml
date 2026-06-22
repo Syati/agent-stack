@@ -7,8 +7,8 @@ services:
       - .:/workspace
       - /var/run/docker.sock:/var/run/docker.sock
       - ${HOME}/.gitconfig:/home/agent/.gitconfig:ro
-      - claude-home:/home/agent/.claude
-      - codex-home:/home/agent/.codex
+      - ${HOME}/.claude:/home/agent/.claude
+      - ${HOME}/.codex:/home/agent/.codex
       - mise-data:/home/agent/.local/share/mise
     env_file:
       - .env
@@ -17,6 +17,4 @@ services:
     working_dir: /workspace
 
 volumes:
-  claude-home:
-  codex-home:
   mise-data:
