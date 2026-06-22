@@ -82,16 +82,12 @@ Runs as non-root user `agent` (home: `/home/agent`, shell: `zsh`). Working direc
 Create `~/.agent-stack.env` (used by the shell function):
 
 ```
-GITHUB_PERSONAL_ACCESS_TOKEN=ghp_...
+ANTHROPIC_API_KEY=op://Private/anthropic/credential
+OPENAI_API_KEY=op://Private/openai/credential
+GH_TOKEN=op://Private/github-pat/credential
 ```
 
-If you use [1Password CLI](https://developer.1password.com/docs/cli/), you can use `op://` references:
-
-```
-GITHUB_PERSONAL_ACCESS_TOKEN=op://Private/github-pat/credential
-```
-
-When `op` is available, references are resolved via `op inject` automatically. Without `op`, the file is passed as-is.
+When [1Password CLI](https://developer.1password.com/docs/cli/) (`op`) is available, `op://` references are resolved via `op inject` automatically. Without `op`, the file is passed as-is.
 
 ## Local Build
 
@@ -103,12 +99,13 @@ cd agent-stack
 cp .env.example .env
 # edit .env with your keys
 
-make build   # build image
-make dev     # start container
-make shell   # open shell
-make claude  # run Claude Code
-make codex   # run Codex
-make clean   # stop and remove
+make build             # build image
+make dev               # start container
+make shell             # open shell
+make claude            # run Claude Code
+make codex             # run Codex
+make update-versions   # update tool versions in Dockerfile
+make clean             # stop and remove
 ```
 
 ## agent-browser Integration
