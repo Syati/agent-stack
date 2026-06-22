@@ -1,0 +1,1 @@
+error: could not write config file /home/agent/.gitconfig: Device or resource busy
