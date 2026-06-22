@@ -3,6 +3,10 @@ name: Build and Push
 on:
   push:
     branches: [main]
+    paths:
+      - docker/**
+      - compose.yml
+      - .github/workflows/build-push.yml
   workflow_dispatch:
 
 env:
