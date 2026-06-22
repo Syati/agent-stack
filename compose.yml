@@ -6,6 +6,7 @@ services:
     volumes:
       - .:/workspace
       - /var/run/docker.sock:/var/run/docker.sock
+      - ${HOME}/.gitconfig:/home/agent/.gitconfig:ro
       - claude-home:/home/agent/.claude
       - codex-home:/home/agent/.codex
       - mise-data:/home/agent/.local/share/mise
