@@ -1,0 +1,135 @@
+rtk いれてるけど rtk init してないよね
+
+---
+
+いや、agent-stack を利用したとき、dockerfile には rtk init をしていないということ
+
+---
+
+rtk init -g --codex で codex 羊毛したほうがいいよね
+
+---
+
+-g --codex だと claude も設定されるの？
+
+---
+
+plugin で     -v ${HOME}/.codex:/home/agent/.codex \ されるけど、rtk init は利用される？
+
+---
+
+はじめて agent を利用した場合 rtk init されてないので、その場合どうすればいいかな？
+
+---
+
+zshrc にかいたら？
+
+---
+
+profile のほうがいい？
+
+---
+
+bash でも profile.sh がソースされるの？
+
+---
+
+commit push
+
+---
+
+claude.md って必要？
+
+---
+
+はい
+
+---
+
+commit push
+
+---
+
+dockerfile にツールのバージョン固定してるけど、update する場合どうする？
+
+---
+
+自動で PR を出す CI にしましょうか
+
+---
+
+commit push
+
+---
+
+make の件もいれようか
+
+---
+
+make じゃなくて shell のほうがらくｚなんじゃない？
+
+---
+
+commit push
+
+---
+
+image が README では ghcr.io/syati/agent-stack:latest、plugin では tag なし ghcr.io/syati/agent-stack なので、:latest に揃えると迷いが減ります。
+
+---
+
+commit push
+
+---
+
+update_arg() {
+  arg="$1"; new="$2"
+  old=$(grep "^ARG ${arg}=" "$FILE" | cut -d= -f2)
+  if [ "$old" != "$new" ] && [ -n "$new" ]; then
+    sed -i.bak "s/^ARG ${arg}=.*/ARG ${arg}=${new}/" "$FILE"
+    rm -f "$FILE.bak"
+    printf '  %s: %s → %s\n' "$arg" "$old" "$new"
+  fi
+}
+
+---
+
+gh: Bad credentials (HTTP 401)
+sed: 1: "s/^ARG RTK_VERSION=.*/A ...": unescaped newline inside substitute pattern
+make: *** [update-versions] Error 1
+
+---
+
+gh api だととれるけど、make だと 401 になるのは op がうまく経由していない？
+
+---
+
+GITHUB_TOKEN つかってるんだけど
+
+---
+
+gh auth token 使えば？
+
+---
+
+できました。いまおもったけど gh が利用する環境変数は GH_TOKEN で github mcp は GITHUB_PERSONAL_ACCESS_TOKEN なのね
+
+---
+
+これも .cluade と同様に、secret は host os のvolume をmount することでもってこれる？
+
+---
+
+1 にしましょうか。 .env.example の環境変数は不要だね
+
+---
+
+readme を update してくれる？
+
+---
+
+readme 85 行目にのこってるよ
+
+---
+
+GH_TOKEN くわえたらいいじゃない？
