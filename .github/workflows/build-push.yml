@@ -52,11 +52,12 @@ jobs:
 
       - run: |
           mkdir -p /tmp/digests
-          echo "${{ steps.build.outputs.digest }}" > "/tmp/digests/${{ hashFiles(matrix.platform) }}"
+          platform="${{ matrix.platform }}"
+          echo "${{ steps.build.outputs.digest }}" > "/tmp/digests/${platform//\//-}"
 
       - uses: actions/upload-artifact@v4
         with:
-          name: digest-${{ hashFiles(matrix.platform) }}
+          name: digest-${{ strategy.job-index }}
           path: /tmp/digests/*
 
   merge:
