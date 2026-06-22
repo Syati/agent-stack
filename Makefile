@@ -32,7 +32,10 @@ chrome: ## Start Chrome with remote debugging for agent-browser
 		--password-store=basic \
 		--disable-blink-features=AutomationControlled
 
+update-versions: ## Update tool versions in Dockerfile to latest
+	@scripts/update-versions.sh
+
 clean: ## Stop containers and remove volumes
 	@$(DC) down -v
 
-.PHONY: help build dev shell claude codex chrome clean
+.PHONY: help build dev shell claude codex chrome update-versions clean
