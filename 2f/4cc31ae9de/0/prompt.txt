@@ -43,3 +43,7 @@ claude.md って必要？
 ---
 
 はい
+
+---
+
+commit push
