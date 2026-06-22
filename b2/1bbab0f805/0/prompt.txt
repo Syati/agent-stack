@@ -1,0 +1,3 @@
+Run mkdir -p /tmp/digests
+/home/runner/work/_temp/5665f038-5600-4f01-832a-134b99687dc7.sh: line 2: /tmp/digests/: Is a directory
+Error: Process completed with exit code 1.
