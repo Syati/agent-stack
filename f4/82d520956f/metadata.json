@@ -1,0 +1,28 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "f482d520956f",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 3,
+  "files_touched": [
+    ".github/workflows/update-versions.yml",
+    "CLAUDE.md",
+    "Makefile",
+    "scripts/update-versions.sh"
+  ],
+  "sessions": [
+    {
+      "metadata": "/f4/82d520956f/0/metadata.json",
+      "transcript": "/f4/82d520956f/0/full.jsonl",
+      "content_hash": "/f4/82d520956f/0/content_hash.txt",
+      "prompt": "/f4/82d520956f/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 114,
+    "cache_creation_tokens": 43587,
+    "cache_read_tokens": 2699505,
+    "output_tokens": 13904,
+    "api_call_count": 72
+  }
+}
