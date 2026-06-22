@@ -1,0 +1,43 @@
+docker: open /tmp/zsheqsZ3A: no such file or directory
+
+---
+
+毎回 tempenv を作る必要がある？
+
+---
+
+これってzsh したあと即時削除される？
+
+---
+
+起動直後削除したほうがよくない？
+
+---
+
+違う方法はない？ env_file にするひつようある？
+
+---
+
+そうしましょうか
+
+---
+
+readme に home に .agent-stack.env が必要の旨を書いたほうがいいよね
+
+---
+
+docker compose は .env を作成しないと思うけど
+
+---
+
+ANTHROPIC_API_KEY=
+OPENAI_API_KEY=
+ここらへんって claude や codexして /signin とかでいいよね？
+
+---
+
+消しましょうか
+
+---
+
+.env もお願い
