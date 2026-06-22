@@ -20,5 +20,5 @@ agent() {
     -v agent-mise-data:/home/agent/.local/share/mise \
     ${env_args[@]} \
     --add-host host.docker.internal:host-gateway \
-    ghcr.io/syati/agent-stack zsh
+    ghcr.io/syati/agent-stack:latest zsh
 }
