@@ -67,3 +67,7 @@ make の件もいれようか
 ---
 
 make じゃなくて shell のほうがらくｚなんじゃない？
+
+---
+
+commit push
