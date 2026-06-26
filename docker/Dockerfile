@@ -1,7 +1,7 @@
 FROM debian:trixie-slim
 
 ARG RTK_VERSION=0.42.4
-ARG CODEX_VERSION=0.141.0
+ARG CODEX_VERSION=0.142.0
 ARG GIT_WT_VERSION=0.29.0
 ARG AGENT_BROWSER_VERSION=0.29.0
 ARG TARGETARCH
@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     curl \
     git \
+    git-lfs \
     grep \
     jq \
     locales \
