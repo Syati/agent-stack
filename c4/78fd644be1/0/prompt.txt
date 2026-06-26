@@ -1,0 +1,2 @@
+agent 起動時以下のエラーがでる
+--: 1: git-lfs: not found
