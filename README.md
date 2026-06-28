@@ -57,13 +57,7 @@ Or source the plugin directly in your `~/.zshrc`:
 source /path/to/agent-stack/agent-stack.plugin.zsh
 ```
 
-Initialize the container-specific config area:
-
-```bash
-agent init
-```
-
-This creates `~/.agent-stack/.env`, `~/.agent-stack/.claude`, `~/.agent-stack/.codex`, and `~/.agent-stack/.chrome-agent`.
+On first use, the plugin automatically creates `~/.agent-stack/.env`, `~/.agent-stack/.claude`, `~/.agent-stack/.codex`, and `~/.agent-stack/.chrome-agent`.
 
 Multiple instances can run in parallel — each `agent` call creates a separate container. Use [git-wt](https://github.com/k1LoW/git-wt) worktrees to avoid file conflicts when multiple agents work on the same repo.
 

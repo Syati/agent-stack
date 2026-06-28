@@ -29,7 +29,7 @@ _agent_env_value() {
   done < <(_agent_env_lines)
 }
 
-_agent_init() {
+_agent_ensure_home() {
   local stack_home
   stack_home=$(_agent_stack_home)
 
@@ -38,8 +38,6 @@ _agent_init() {
   if [[ ! -f "${stack_home}/.env" ]]; then
     touch "${stack_home}/.env"
   fi
-
-  echo "Initialized ${stack_home}"
 }
 
 _agent_chrome() {
@@ -48,7 +46,7 @@ _agent_chrome() {
   local chrome_bin="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
   local chrome_port
 
-  _agent_init >/dev/null
+  _agent_ensure_home
 
   if [[ "$OSTYPE" != darwin* ]]; then
     echo "agent chrome currently supports macOS only" >&2
@@ -81,7 +79,7 @@ _agent_run() {
   local env_file=${stack_home}/.env
   local env_args=()
 
-  _agent_init >/dev/null
+  _agent_ensure_home
 
   if [[ -f "$env_file" ]]; then
     if command -v op &>/dev/null; then
@@ -115,7 +113,6 @@ _agent_help() {
   echo ""
   echo "Commands:"
   echo "  (none)   Start agent container in current directory"
-  echo "  init     Create ~/.agent-stack, .env, .claude, .codex, and .chrome-agent"
   echo "  chrome   Start host Chrome with remote debugging for agent-browser"
   echo "  update   Pull latest image from ghcr.io"
   echo "  help     Show this help"
@@ -123,7 +120,6 @@ _agent_help() {
 
 agent() {
   case "$1" in
-    init)        _agent_init ;;
     chrome)      _agent_chrome ;;
     update)      _agent_update ;;
     help|--help|-h) _agent_help ;;
