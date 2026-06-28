@@ -26,7 +26,7 @@ chrome: ## Start Chrome with remote debugging for agent-browser
 	/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \
 		--remote-debugging-port=$(CHROME_REMOTE_PORT) \
 		--remote-debugging-address=0.0.0.0 \
-		--user-data-dir=$(HOME)/.chrome-agent \
+		--user-data-dir=$(HOME)/.agent-stack/.chrome-agent \
 		--no-first-run \
 		--no-default-browser-check \
 		--password-store=basic \

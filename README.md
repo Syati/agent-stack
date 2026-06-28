@@ -63,7 +63,7 @@ Initialize the container-specific config area:
 agent init
 ```
 
-This creates `~/.agent-stack/.env`, `~/.agent-stack/.claude`, and `~/.agent-stack/.codex`.
+This creates `~/.agent-stack/.env`, `~/.agent-stack/.claude`, `~/.agent-stack/.codex`, and `~/.agent-stack/.chrome-agent`.
 
 Multiple instances can run in parallel — each `agent` call creates a separate container. Use [git-wt](https://github.com/k1LoW/git-wt) worktrees to avoid file conflicts when multiple agents work on the same repo.
 
@@ -133,17 +133,10 @@ make clean             # stop and remove
 
 [agent-browser](https://github.com/vercel-labs/agent-browser) is pre-installed in the container. Start Chrome on the host with remote debugging, then connect from the container.
 
-**Host side** (`make chrome` or manually):
+**Host side** (`agent chrome`, `make chrome`, or manually):
 
 ```bash
-/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \
-  --remote-debugging-port=9222 \
-  --remote-debugging-address=0.0.0.0 \
-  --user-data-dir=$HOME/.chrome-agent \
-  --no-first-run \
-  --no-default-browser-check \
-  --password-store=basic \
-  --disable-blink-features=AutomationControlled
+agent chrome
 ```
 
 **Container side** (run `chrome-connect` to resolve WebSocket URL and connect):
@@ -152,7 +145,7 @@ make clean             # stop and remove
 chrome-connect
 ```
 
-Port is configurable via `CHROME_REMOTE_PORT` in `.env` (default: 9222).
+`agent chrome` reads `CHROME_REMOTE_PORT` from `~/.agent-stack/.env` and defaults to `9222`. Its Chrome profile is stored in `~/.agent-stack/.chrome-agent`, so the browser state also stays scoped to `agent-stack`. The plugin launcher is currently macOS-only because it uses the standard `/Applications/Google Chrome.app/...` path.
 
 ## License
 
