@@ -14,11 +14,13 @@ services:
       - .:/workspace
       - /var/run/docker.sock:/var/run/docker.sock  # host Docker access
       - ${HOME}/.gitconfig:/home/agent/.gitconfig:ro    # git config
-      - ${HOME}/.claude:/home/agent/.claude
-      - ${HOME}/.codex:/home/agent/.codex
+      - ${HOME}/.agent-stack:/home/agent/.agent-stack
       - mise-data:/home/agent/.local/share/mise
     env_file:
       - .env
+    environment:
+      CODEX_HOME: /home/agent/.agent-stack/.codex
+      CLAUDE_CONFIG_DIR: /home/agent/.agent-stack/.claude
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
@@ -27,7 +29,7 @@ volumes:
 ```
 
 - **Docker socket**: allows the container to control host Docker (`docker compose run`, `docker exec`, etc.). Remove if not needed.
-- **Bind mounts (`~/.claude`, `~/.codex`)**: persist auth and session data on the host. Survives `docker compose down -v`.
+- **Bind mount (`~/.agent-stack`)**: persists container-only agent settings on the host. `Codex` uses `~/.agent-stack/.codex`, `Claude` uses `~/.agent-stack/.claude`, so they stay separated from host-side `~/.codex` and `~/.claude`.
 - **Named volume (`mise-data`)**: persists mise-installed runtimes across container recreations. Cleared by `docker compose down -v`.
 - **gitconfig**: mounts host git config (read-only) so `git commit` and `git push` work inside the container.
 
@@ -55,6 +57,14 @@ Or source the plugin directly in your `~/.zshrc`:
 source /path/to/agent-stack/agent-stack.plugin.zsh
 ```
 
+Initialize the container-specific config area:
+
+```bash
+agent init
+```
+
+This creates `~/.agent-stack/.env`, `~/.agent-stack/.claude`, and `~/.agent-stack/.codex`.
+
 Multiple instances can run in parallel — each `agent` call creates a separate container. Use [git-wt](https://github.com/k1LoW/git-wt) worktrees to avoid file conflicts when multiple agents work on the same repo.
 
 ## Container User
@@ -79,7 +89,7 @@ Runs as non-root user `agent` (home: `/home/agent`, shell: `zsh`). Working direc
 
 ## Environment Variables
 
-Create `~/.agent-stack.env` (used by the shell function):
+Create `~/.agent-stack/.env` (used by the shell function):
 
 ```
 ANTHROPIC_API_KEY=op://Private/anthropic/credential
@@ -87,7 +97,18 @@ OPENAI_API_KEY=op://Private/openai/credential
 GH_TOKEN=op://Private/github-pat/credential
 ```
 
+If you already have `~/.agent-stack.env`, move its contents into `~/.agent-stack/.env`.
+
 When [1Password CLI](https://developer.1password.com/docs/cli/) (`op`) is available, `op://` references are resolved via `op inject` automatically. Without `op`, the file is passed as-is.
+
+`agent` sets these paths explicitly inside the container:
+
+```bash
+CODEX_HOME=/home/agent/.agent-stack/.codex
+CLAUDE_CONFIG_DIR=/home/agent/.agent-stack/.claude
+```
+
+This keeps container auth and settings separate from host-side `~/.codex` and `~/.claude`. On first launch, authenticate `codex` and `claude` once inside the container to populate the new directories.
 
 ## Local Build
 
