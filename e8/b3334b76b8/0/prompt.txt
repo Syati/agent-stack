@@ -1,0 +1,9 @@
+codex や　claude で web signin で auth とるとき、docker からだと開けないし、コールバックも受け取れないけどなぜ？
+
+---
+
+ホストOSとは完全別にしようおおもって今環境をつくっている。chrome RDPとかどう？
+
+---
+
+codex 実施したとき auth なかったら login してって出てくると思うけど、devaice-auth えらべた？ &
