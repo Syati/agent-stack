@@ -7,7 +7,7 @@ _agent_env_lines() {
   stack_home=$(_agent_stack_home)
   local env_file=${stack_home}/.env
 
-  if [[ ! -f "$env_file" ]]; then
+  if [[ ! -s "$env_file" ]]; then
     return 0
   fi
 
@@ -38,6 +38,27 @@ _agent_ensure_home() {
   if [[ ! -f "${stack_home}/.env" ]]; then
     touch "${stack_home}/.env"
   fi
+
+  if [[ ! -f "${stack_home}/.claude.json" ]]; then
+    touch "${stack_home}/.claude.json"
+  fi
+}
+
+_agent_ssh_agent_sock() {
+  local candidates=()
+  if [[ "$OSTYPE" == darwin* ]]; then
+    candidates+=("${HOME}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock")
+  else
+    candidates+=("${HOME}/.1password/agent.sock")
+  fi
+
+  local candidate
+  for candidate in "${candidates[@]}"; do
+    if [[ -S "$candidate" ]]; then
+      echo "$candidate"
+      return 0
+    fi
+  done
 }
 
 _agent_chrome() {
@@ -78,10 +99,12 @@ _agent_run() {
   stack_home=$(_agent_stack_home)
   local env_file=${stack_home}/.env
   local env_args=()
+  local ssh_agent_args=()
+  local ssh_agent_sock
 
   _agent_ensure_home
 
-  if [[ -f "$env_file" ]]; then
+  if [[ -s "$env_file" ]]; then
     if command -v op &>/dev/null; then
       while IFS= read -r line; do
         [[ -n "$line" && "$line" != \#* ]] && env_args+=(-e "$line")
@@ -91,13 +114,23 @@ _agent_run() {
     fi
   fi
 
+  ssh_agent_sock=$(_agent_ssh_agent_sock)
+  if [[ -n "$ssh_agent_sock" ]]; then
+    ssh_agent_args=(
+      -v "${ssh_agent_sock}:/ssh-agent.sock"
+      -e SSH_AUTH_SOCK=/ssh-agent.sock
+    )
+  fi
+
   docker run -it \
     -v "$(pwd)":/workspace \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v "${HOME}/.gitconfig:/home/agent/.gitconfig:ro" \
     -v "${stack_home}:/home/agent/.agent-stack" \
+    -v "${stack_home}/.claude.json:/home/agent/.claude.json" \
     -v agent-mise-data:/home/agent/.local/share/mise \
     ${env_args[@]} \
+    ${ssh_agent_args[@]} \
     -e CODEX_HOME=/home/agent/.agent-stack/.codex \
     -e CLAUDE_CONFIG_DIR=/home/agent/.agent-stack/.claude \
     --add-host host.docker.internal:host-gateway \
