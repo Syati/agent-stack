@@ -99,8 +99,22 @@ _agent_run() {
   stack_home=$(_agent_stack_home)
   local env_file=${stack_home}/.env
   local env_args=()
+  local docker_sock_args=()
   local ssh_agent_args=()
   local ssh_agent_sock
+  local arg
+
+  for arg in "$@"; do
+    case "$arg" in
+      --docker|--docker-sock)
+        docker_sock_args=(-v /var/run/docker.sock:/var/run/docker.sock)
+        ;;
+      *)
+        echo "Unknown option: ${arg}" >&2
+        return 1
+        ;;
+    esac
+  done
 
   _agent_ensure_home
 
@@ -117,18 +131,18 @@ _agent_run() {
   ssh_agent_sock=$(_agent_ssh_agent_sock)
   if [[ -n "$ssh_agent_sock" ]]; then
     ssh_agent_args=(
-      -v "${ssh_agent_sock}:/ssh-agent.sock"
+      -v "${ssh_agent_sock}:/ssh-agent.sock:ro"
       -e SSH_AUTH_SOCK=/ssh-agent.sock
     )
   fi
 
   docker run -it \
     -v "$(pwd)":/workspace \
-    -v /var/run/docker.sock:/var/run/docker.sock \
     -v "${HOME}/.gitconfig:/home/agent/.gitconfig:ro" \
     -v "${stack_home}:/home/agent/.agent-stack" \
     -v "${stack_home}/.claude.json:/home/agent/.claude.json" \
     -v agent-mise-data:/home/agent/.local/share/mise \
+    ${docker_sock_args[@]} \
     ${env_args[@]} \
     ${ssh_agent_args[@]} \
     -e CODEX_HOME=/home/agent/.agent-stack/.codex \
@@ -142,7 +156,10 @@ _agent_update() {
 }
 
 _agent_help() {
-  echo "Usage: agent [command]"
+  echo "Usage: agent [options] [command]"
+  echo ""
+  echo "Options:"
+  echo "  --docker, --docker-sock  Mount host Docker socket"
   echo ""
   echo "Commands:"
   echo "  (none)   Start agent container in current directory"
@@ -156,6 +173,6 @@ agent() {
     chrome)      _agent_chrome ;;
     update)      _agent_update ;;
     help|--help|-h) _agent_help ;;
-    *)           _agent_run ;;
+    *)           _agent_run "$@" ;;
   esac
 }

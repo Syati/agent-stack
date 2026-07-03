@@ -59,6 +59,8 @@ source /path/to/agent-stack/agent-stack.plugin.zsh
 
 On first use, the plugin automatically creates `~/.agent-stack/.env`, `~/.agent-stack/.claude`, `~/.agent-stack/.codex`, and `~/.agent-stack/.chrome-agent`.
 
+By default, `agent` does not mount the host Docker socket. Use `agent --docker` only when the container needs to run host Docker commands such as `docker build`, `docker run`, or `docker compose`.
+
 Multiple instances can run in parallel — each `agent` call creates a separate container. Use [git-wt](https://github.com/k1LoW/git-wt) worktrees to avoid file conflicts when multiple agents work on the same repo.
 
 ## Container User
