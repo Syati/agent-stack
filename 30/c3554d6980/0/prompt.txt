@@ -1,5 +1,1 @@
-docker/.zshrc zoxide いれたけど、_ZO_DATA_DIR をセットしないと永続化されないよね？
-
----
-
-agent-stack.plugin.zsh で volume mount しているから参照後 _ZO_DATA_DIR をセットしてくださ
+commit push
