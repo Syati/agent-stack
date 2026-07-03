@@ -157,6 +157,7 @@ _agent_run() {
   fi
 
   docker run -it \
+    --detach-keys="ctrl-@" \
     -v "$(pwd)":/workspace \
     -v "${HOME}/.gitconfig:/home/agent/.gitconfig:ro" \
     -v "${stack_home}:/home/agent/.agent-stack" \
