@@ -4,6 +4,10 @@ AI agent development container with [Claude Code](https://claude.ai/code), [Code
 
 [日本語版 README](README.ja.md)
 
+## Prerequisites
+
+- macOS + [Colima](https://github.com/abiosoft/colima) running as the Docker backend. The shell launcher calls `colima ssh` / `colima status` to resolve the SSH agent socket and to check readiness, so Docker Desktop or other backends are not supported out of the box.
+
 ## Quick Start
 
 Source the plugin in your `~/.zshrc`:

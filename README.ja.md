@@ -2,6 +2,10 @@
 
 [English README](README.md)
 
+## 前提条件
+
+- macOS + Docker バックエンドとして [Colima](https://github.com/abiosoft/colima) が起動していること。shell launcher は SSH agent socket の解決や起動確認のために `colima ssh` / `colima status` を呼び出すため、Docker Desktop など他のバックエンドは標準ではサポートしていません。
+
 [Claude Code](https://claude.ai/code), [Codex](https://github.com/openai/codex), [RTK](https://github.com/rtk-ai/rtk), [mise](https://mise.jdx.dev/), [APM](https://github.com/microsoft/apm), [entire](https://entire.io), [git-wt](https://github.com/k1LoW/git-wt) などをプリインストールした、AI エージェント開発向けコンテナです。
 
 ## クイックスタート
