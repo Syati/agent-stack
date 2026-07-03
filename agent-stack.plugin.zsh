@@ -131,7 +131,7 @@ _agent_run() {
   ssh_agent_sock=$(_agent_ssh_agent_sock)
   if [[ -n "$ssh_agent_sock" ]]; then
     ssh_agent_args=(
-      -v "${ssh_agent_sock}:/ssh-agent.sock:ro"
+      -v "${ssh_agent_sock}:/ssh-agent.sock"
       -e SSH_AUTH_SOCK=/ssh-agent.sock
     )
   fi
