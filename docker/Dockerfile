@@ -90,6 +90,12 @@ RUN echo '. ~/.profile.sh' >> /home/agent/.bashrc
 USER agent
 WORKDIR /home/agent
 
+# Pre-seed known_hosts so git over SSH (e.g. git push to GitHub) works
+# without an interactive host key prompt.
+RUN mkdir -p -m 700 /home/agent/.ssh \
+    && ssh-keyscan -H github.com >> /home/agent/.ssh/known_hosts \
+    && chmod 600 /home/agent/.ssh/known_hosts
+
 # mise
 RUN curl -fsSL https://mise.run | sh
 ENV PATH="/home/agent/.local/bin:${PATH}"
