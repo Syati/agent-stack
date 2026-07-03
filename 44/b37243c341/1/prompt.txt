@@ -1,0 +1,5 @@
+readme に colima 前提って書いたほうがよくない？
+
+---
+
+追記 commit push までして
