@@ -1,0 +1,1 @@
+agent-entrypoint ってうごいてる？ 今 agent から実行してるけど、socat がきいてない
