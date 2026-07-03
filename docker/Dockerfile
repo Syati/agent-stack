@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     locales \
     openssh-client \
     ripgrep \
+    socat \
     tree \
     unzip \
     zsh \
@@ -77,6 +78,8 @@ RUN curl -fsSL "https://github.com/k1LoW/git-wt/releases/download/v${GIT_WT_VERS
 
 # Scripts
 COPY docker/bin/chrome-connect /usr/local/bin/chrome-connect
+COPY docker/bin/agent-entrypoint /usr/local/bin/agent-entrypoint
+RUN chmod +x /usr/local/bin/chrome-connect /usr/local/bin/agent-entrypoint
 
 # Non-root user
 RUN git config --system --add safe.directory /workspace \
@@ -117,4 +120,5 @@ USER agent
 RUN pip3 install --user --break-system-packages apm-cli
 
 WORKDIR /workspace
+ENTRYPOINT ["/usr/local/bin/agent-entrypoint"]
 CMD ["sleep", "infinity"]

@@ -68,9 +68,24 @@ github = "Syati/agent-stack"
 ```bash
 GH_TOKEN=op://Private/github-pat/credential
 CHROME_REMOTE_PORT=9222
+AGENT_TCP_BRIDGES=127.0.0.1:64342->host.docker.internal:64342
 ```
 
 [1Password CLI](https://developer.1password.com/docs/cli/) (`op`) が使える環境では、`op://` 参照を `op inject` で自動展開します。`op` がない場合は、そのまま `--env-file` として渡します。
+
+`AGENT_TCP_BRIDGES` は任意です。コンテナ起動時に 1 個以上の TCP bridge を先に立ち上げます。ホスト側サービスが `localhost` 前提のままリクエストを受けたい場合に、`listen_host:listen_port->target_host:target_port` をカンマ区切りで指定してください。
+
+たとえば RubyMine MCP をホスト側で動かしたまま、コンテナ側 Codex から `http://127.0.0.1:64342/stream` を維持したい場合は次のように使えます。
+
+```bash
+AGENT_TCP_BRIDGES=127.0.0.1:64342->host.docker.internal:64342
+```
+
+複数の bridge を使いたい場合は、`,` 区切りで並べて指定できます。
+
+```bash
+AGENT_TCP_BRIDGES=127.0.0.1:64342->host.docker.internal:64342,127.0.0.1:9223->host.docker.internal:9223
+```
 
 `agent` はコンテナ内で次のパスを明示的に設定します。
 

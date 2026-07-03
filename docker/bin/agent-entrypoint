@@ -1,0 +1,41 @@
+#!/bin/sh
+set -eu
+
+start_tcp_bridges() {
+  bridges=${AGENT_TCP_BRIDGES:-}
+  if [ -z "$bridges" ]; then
+    return 0
+  fi
+
+  old_ifs=$IFS
+  IFS=','
+  set -- $bridges
+  IFS=$old_ifs
+
+  for bridge in "$@"; do
+    bridge=$(printf '%s' "$bridge" | tr -d '[:space:]')
+    [ -n "$bridge" ] || continue
+
+    listen=${bridge%%->*}
+    target=${bridge#*->}
+    if [ "$listen" = "$bridge" ] || [ -z "$listen" ] || [ -z "$target" ]; then
+      echo "agent-entrypoint: invalid AGENT_TCP_BRIDGES entry: $bridge" >&2
+      continue
+    fi
+
+    listen_host=${listen%:*}
+    listen_port=${listen##*:}
+    target_host=${target%:*}
+    target_port=${target##*:}
+
+    if [ -z "$listen_host" ] || [ -z "$listen_port" ] || [ -z "$target_host" ] || [ -z "$target_port" ]; then
+      echo "agent-entrypoint: invalid AGENT_TCP_BRIDGES entry: $bridge" >&2
+      continue
+    fi
+
+    socat "TCP-LISTEN:${listen_port},bind=${listen_host},fork,reuseaddr" "TCP:${target_host}:${target_port}" &
+  done
+}
+
+start_tcp_bridges
+exec "$@"

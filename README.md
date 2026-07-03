@@ -68,9 +68,24 @@ Runs as non-root user `agent` (home: `/home/agent`, shell: `zsh`). Working direc
 ```
 GH_TOKEN=op://Private/github-pat/credential
 CHROME_REMOTE_PORT=9222
+AGENT_TCP_BRIDGES=127.0.0.1:64342->host.docker.internal:64342
 ```
 
 When [1Password CLI](https://developer.1password.com/docs/cli/) (`op`) is available, `op://` references are resolved via `op inject` automatically. Without `op`, the file is passed as-is.
+
+`AGENT_TCP_BRIDGES` is optional. It starts one or more TCP bridges inside the container before your command runs. Use a comma-separated list of `listen_host:listen_port->target_host:target_port` entries when a host-side service only accepts requests that preserve `localhost` on the client side.
+
+For example, this lets container-side Codex keep using `http://127.0.0.1:64342/stream` for RubyMine MCP while forwarding the traffic to the host:
+
+```bash
+AGENT_TCP_BRIDGES=127.0.0.1:64342->host.docker.internal:64342
+```
+
+Multiple bridges can be defined with commas:
+
+```bash
+AGENT_TCP_BRIDGES=127.0.0.1:64342->host.docker.internal:64342,127.0.0.1:9223->host.docker.internal:9223
+```
 
 `agent` sets these paths explicitly inside the container:
 
