@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     ca-certificates \
     curl \
+    fzf \
     git \
     git-lfs \
     grep \
@@ -24,6 +25,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     socat \
     tree \
     unzip \
+    zoxide \
     zsh \
     zsh-autosuggestions \
     zsh-syntax-highlighting \
