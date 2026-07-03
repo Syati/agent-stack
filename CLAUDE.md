@@ -4,10 +4,10 @@ AI 開発用 Docker コンテナスタック。
 
 ## Commands
 
-- `make build` — イメージビルド
-- `make dev` — コンテナ起動
-- `make shell` — コンテナに入る
-- `make claude` — Claude Code 起動
-- `make codex` — Codex 起動
-- `make update-versions` — Dockerfile のツールバージョンを最新に更新
-- `make clean` — コンテナ・ボリューム削除
+- `agent` — カレントディレクトリを `/workspace` にマウントしてシェル起動
+- `agent claude` — コンテナ内で Claude Code 起動
+- `agent codex` — コンテナ内で Codex 起動
+- `agent --docker` — ホスト Docker socket をマウントして起動
+- `docker build -t agent-stack:local -f docker/Dockerfile .` — ローカルイメージビルド
+- `AGENT_STACK_IMAGE=agent-stack:local agent` — ローカルビルドしたイメージで起動
+- `scripts/update-versions.sh` — Dockerfile のツールバージョンを最新に更新

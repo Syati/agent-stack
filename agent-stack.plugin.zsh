@@ -45,20 +45,25 @@ _agent_ensure_home() {
 }
 
 _agent_ssh_agent_sock() {
-  local candidates=()
-  if [[ "$OSTYPE" == darwin* ]]; then
-    candidates+=("${HOME}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock")
-  else
-    candidates+=("${HOME}/.1password/agent.sock")
+  if ! command -v colima &>/dev/null; then
+    return 0
   fi
 
-  local candidate
-  for candidate in "${candidates[@]}"; do
-    if [[ -S "$candidate" ]]; then
-      echo "$candidate"
-      return 0
-    fi
-  done
+  colima ssh -- sh -lc 'if [ -n "$SSH_AUTH_SOCK" ] && [ -S "$SSH_AUTH_SOCK" ]; then printf "%s" "$SSH_AUTH_SOCK"; fi' 2>/dev/null
+}
+
+_agent_colima_ready() {
+  command -v colima &>/dev/null && colima status &>/dev/null
+}
+
+_agent_colima_warning() {
+  if ! _agent_colima_ready; then
+    echo "agent: colima is not running; SSH agent and Docker mounts may not work as expected" >&2
+  fi
+}
+
+_agent_image() {
+  echo "${AGENT_STACK_IMAGE:-ghcr.io/syati/agent-stack:latest}"
 }
 
 _agent_chrome() {
@@ -102,21 +107,32 @@ _agent_run() {
   local docker_sock_args=()
   local ssh_agent_args=()
   local ssh_agent_sock
+  local image
+  local container_cmd=()
   local arg
 
-  for arg in "$@"; do
+  while [[ $# -gt 0 ]]; do
+    arg=$1
     case "$arg" in
       --docker|--docker-sock)
         docker_sock_args=(-v /var/run/docker.sock:/var/run/docker.sock)
+        shift
+        ;;
+      --)
+        shift
+        container_cmd=("$@")
+        break
         ;;
       *)
-        echo "Unknown option: ${arg}" >&2
-        return 1
+        container_cmd=("$@")
+        break
         ;;
     esac
   done
 
   _agent_ensure_home
+  _agent_colima_warning
+  image=$(_agent_image)
 
   if [[ -s "$env_file" ]]; then
     if command -v op &>/dev/null; then
@@ -136,6 +152,10 @@ _agent_run() {
     )
   fi
 
+  if [[ ${#container_cmd[@]} -eq 0 ]]; then
+    container_cmd=(zsh)
+  fi
+
   docker run -it \
     -v "$(pwd)":/workspace \
     -v "${HOME}/.gitconfig:/home/agent/.gitconfig:ro" \
@@ -148,11 +168,11 @@ _agent_run() {
     -e CODEX_HOME=/home/agent/.agent-stack/.codex \
     -e CLAUDE_CONFIG_DIR=/home/agent/.agent-stack/.claude \
     --add-host host.docker.internal:host-gateway \
-    ghcr.io/syati/agent-stack:latest zsh
+    "${image}" "${container_cmd[@]}"
 }
 
 _agent_update() {
-  docker pull ghcr.io/syati/agent-stack:latest
+  docker pull "$(_agent_image)"
 }
 
 _agent_help() {
@@ -163,8 +183,10 @@ _agent_help() {
   echo ""
   echo "Commands:"
   echo "  (none)   Start agent container in current directory"
+  echo "  codex    Run Codex in the container"
+  echo "  claude   Run Claude Code in the container"
   echo "  chrome   Start host Chrome with remote debugging for agent-browser"
-  echo "  update   Pull latest image from ghcr.io"
+  echo "  update   Pull latest image"
   echo "  help     Show this help"
 }
 
