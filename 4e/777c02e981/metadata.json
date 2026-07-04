@@ -1,0 +1,30 @@
+{
+  "cli_version": "0.7.8",
+  "checkpoint_version": "branch-v1",
+  "checkpoint_id": "4e777c02e981",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 3,
+  "files_touched": [
+    "README.ja.md",
+    "README.md",
+    "agent-stack.plugin.zsh",
+    "docker/.zshrc"
+  ],
+  "sessions": [
+    {
+      "metadata": "/4e/777c02e981/0/metadata.json",
+      "transcript": "/4e/777c02e981/0/full.jsonl",
+      "compact_transcript": "/4e/777c02e981/0/transcript.jsonl",
+      "content_hash": "/4e/777c02e981/0/content_hash.txt",
+      "prompt": "/4e/777c02e981/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 117693,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 319232,
+    "output_tokens": 4936,
+    "api_call_count": 18
+  }
+}
