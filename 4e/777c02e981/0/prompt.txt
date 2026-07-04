@@ -1,15 +1,1 @@
-shelsone で以下のエラーがでる
-error: failed to install plugin `entire-fzf`
-  due to: no global `apply` defined (help: set `shell` to use defaults)
-
----
-
-sheldon init --shell zsh をどこかにいれといたらいい？
-
----
-
-そうしましょうか
-
----
-
-いま .zshrd に SHELDON_CONFIG_FILE を設定しているけど SHELDON_DATA_DIR も設定したほうがいいじゃない？
+commit push
