@@ -4,6 +4,7 @@ ARG RTK_VERSION=0.43.0
 ARG CODEX_VERSION=0.142.4
 ARG GIT_WT_VERSION=0.29.0
 ARG AGENT_BROWSER_VERSION=0.31.1
+ARG SHELDON_VERSION=0.8.3
 ARG TARGETARCH
 
 ENV LANG=C.UTF-8
@@ -22,7 +23,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     locales \
     openssh-client \
     ripgrep \
-    sheldon \
     socat \
     tree \
     unzip \
@@ -48,6 +48,18 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
 
 # starship prompt
 RUN curl -fsSL https://starship.rs/install.sh | sh -s -- -y
+
+# sheldon
+RUN case "${TARGETARCH}" in \
+      amd64) SHELDON_ARCH="x86_64-unknown-linux-musl" ;; \
+      arm64) SHELDON_ARCH="aarch64-unknown-linux-musl" ;; \
+      *) echo "Unsupported arch: ${TARGETARCH}" && exit 1 ;; \
+    esac \
+    && curl -fsSL "https://github.com/rossmacarthur/sheldon/releases/download/${SHELDON_VERSION}/sheldon-${SHELDON_VERSION}-${SHELDON_ARCH}.tar.gz" \
+      -o /tmp/sheldon.tar.gz \
+    && tar xzf /tmp/sheldon.tar.gz -C /usr/local/bin sheldon \
+    && chmod +x /usr/local/bin/sheldon \
+    && rm /tmp/sheldon.tar.gz
 
 # RTK
 RUN case "${TARGETARCH}" in \
