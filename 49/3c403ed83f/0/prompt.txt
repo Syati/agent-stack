@@ -1,0 +1,2 @@
+github action の build で以下のエラー
+ERROR: failed to build: failed to solve: process "/bin/sh -c apt-get update && apt-get install -y --no-install-recommends     build-essential     ca-certificates     curl     fzf     git     git-lfs     grep     jq     locales     openssh-client     ripgrep     sheldon     socat     tree     unzip     zoxide     zsh     zsh-autosuggestions     zsh-syntax-highlighting     && sed -i 's/^# *\\(C.UTF-8\\)/\\1/' /etc/locale.gen     && locale-gen     && rm -rf /var/lib/apt/lists/*" did not complete successfully: exit code: 100
