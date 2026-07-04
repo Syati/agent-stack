@@ -28,14 +28,14 @@ agent
 - **gitconfig**: mounts host git config (read-only) so `git commit` and `git push` work inside the container.
 - **SSH agent**: the shell launcher resolves the forwarded agent socket from the Colima VM and mounts it into the container. Set `ssh.forwardAgent: true` in Colima so the forwarded agent is available.
 
-With [sheldon](https://github.com/rossmacarthur/sheldon), add this plugin to `~/.config/sheldon/plugins.toml` instead of sourcing it manually:
+With preinstalled [sheldon](https://github.com/rossmacarthur/sheldon), optional shell plugins can be added in `~/.agent-stack/.sheldon/plugins.toml`. For example:
 
 ```toml
-[plugins.agent-stack]
-github = "Syati/agent-stack"
+[plugins.entire-fzf]
+github = "Syati/entire-fzf"
 ```
 
-On first use, the plugin automatically creates `~/.agent-stack/.env`, `~/.agent-stack/.claude`, `~/.agent-stack/.codex`, and `~/.agent-stack/.chrome-agent`.
+On first use, the plugin automatically creates `~/.agent-stack/.env`, `~/.agent-stack/.claude`, `~/.agent-stack/.codex`, `~/.agent-stack/.chrome-agent`, and `~/.agent-stack/.sheldon/plugins.toml`.
 
 By default, `agent` does not mount the host Docker socket. Use `agent --docker` only when the container needs to run host Docker commands such as `docker build`, `docker run`, or `docker compose`.
 
@@ -60,6 +60,7 @@ Runs as non-root user `agent` (home: `/home/agent`, shell: `zsh`). Working direc
 | [APM](https://github.com/microsoft/apm) | Agent Package Manager for MCP/skills |
 | [entire](https://entire.io) | AI session capture for git |
 | [git-wt](https://github.com/k1LoW/git-wt) | Simplified git worktree management |
+| [sheldon](https://github.com/rossmacarthur/sheldon) | Plugin manager for user-managed shell extensions |
 | [gh](https://cli.github.com/) | GitHub CLI |
 | [ripgrep](https://github.com/BurntSushi/ripgrep) | Fast grep (auto-used by RTK) |
 | [agent-browser](https://github.com/vercel-labs/agent-browser) | Browser automation for AI agents |

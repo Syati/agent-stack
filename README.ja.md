@@ -28,14 +28,14 @@ agent
 - **gitconfig**: ホストの git 設定を read-only でマウントし、コンテナ内でも `git commit` や `git push` を使えるようにします。
 - **SSH agent**: Colima VM 内の forwarded agent socket を解決してコンテナへマウントします。Colima 側で `ssh.forwardAgent: true` を有効にしてください。
 
-[sheldon](https://github.com/rossmacarthur/sheldon) を使うなら、手動で `source` する代わりに `~/.config/sheldon/plugins.toml` へ追加できます。
+プリインストール済みの [sheldon](https://github.com/rossmacarthur/sheldon) を使うと、追加の shell plugin を `~/.agent-stack/.sheldon/plugins.toml` でユーザー側から管理できます。たとえば:
 
 ```toml
-[plugins.agent-stack]
-github = "Syati/agent-stack"
+[plugins.entire-fzf]
+github = "Syati/entire-fzf"
 ```
 
-初回実行時に `~/.agent-stack/.env` `~/.agent-stack/.claude` `~/.agent-stack/.codex` `~/.agent-stack/.chrome-agent` を自動作成します。
+初回実行時に `~/.agent-stack/.env` `~/.agent-stack/.claude` `~/.agent-stack/.codex` `~/.agent-stack/.chrome-agent` `~/.agent-stack/.sheldon/plugins.toml` を自動作成します。
 
 デフォルトではホストの Docker socket はマウントしません。コンテナ内からホスト Docker を使う必要がある場合だけ `agent --docker` を使ってください。
 
@@ -60,6 +60,7 @@ github = "Syati/agent-stack"
 | [APM](https://github.com/microsoft/apm) | MCP / skills 用の Agent Package Manager |
 | [entire](https://entire.io) | AI セッションの git 記録ツール |
 | [git-wt](https://github.com/k1LoW/git-wt) | シンプルな git worktree 管理 |
+| [sheldon](https://github.com/rossmacarthur/sheldon) | ユーザー管理の shell 拡張向け plugin manager |
 | [gh](https://cli.github.com/) | GitHub CLI |
 | [ripgrep](https://github.com/BurntSushi/ripgrep) | 高速 grep |
 | [agent-browser](https://github.com/vercel-labs/agent-browser) | AI エージェント向けブラウザ自動化 |

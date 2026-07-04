@@ -33,7 +33,7 @@ _agent_ensure_home() {
   local stack_home
   stack_home=$(_agent_stack_home)
 
-  mkdir -p "${stack_home}/.claude" "${stack_home}/.codex" "${stack_home}/.chrome-agent"
+  mkdir -p "${stack_home}/.claude" "${stack_home}/.codex" "${stack_home}/.chrome-agent" "${stack_home}/.sheldon"
 
   if [[ ! -f "${stack_home}/.env" ]]; then
     touch "${stack_home}/.env"
@@ -41,6 +41,10 @@ _agent_ensure_home() {
 
   if [[ ! -f "${stack_home}/.claude.json" ]]; then
     touch "${stack_home}/.claude.json"
+  fi
+
+  if [[ ! -f "${stack_home}/.sheldon/plugins.toml" ]]; then
+    touch "${stack_home}/.sheldon/plugins.toml"
   fi
 }
 
