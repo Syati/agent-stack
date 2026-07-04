@@ -31,6 +31,8 @@ agent
 With preinstalled [sheldon](https://github.com/rossmacarthur/sheldon), optional shell plugins can be added in `~/.agent-stack/.sheldon/plugins.toml`. For example:
 
 ```toml
+shell = "zsh"
+
 [plugins.entire-fzf]
 github = "Syati/entire-fzf"
 ```

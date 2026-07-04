@@ -31,6 +31,8 @@ agent
 プリインストール済みの [sheldon](https://github.com/rossmacarthur/sheldon) を使うと、追加の shell plugin を `~/.agent-stack/.sheldon/plugins.toml` でユーザー側から管理できます。たとえば:
 
 ```toml
+shell = "zsh"
+
 [plugins.entire-fzf]
 github = "Syati/entire-fzf"
 ```

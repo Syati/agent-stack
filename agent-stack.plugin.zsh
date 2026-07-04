@@ -44,7 +44,7 @@ _agent_ensure_home() {
   fi
 
   if [[ ! -f "${stack_home}/.sheldon/plugins.toml" ]]; then
-    touch "${stack_home}/.sheldon/plugins.toml"
+    printf 'shell = "zsh"\n' > "${stack_home}/.sheldon/plugins.toml"
   fi
 }
 
