@@ -7,6 +7,15 @@ AI agent development container with [Claude Code](https://claude.ai/code), [Code
 ## Prerequisites
 
 - macOS + [Colima](https://github.com/abiosoft/colima) running as the Docker backend. The shell launcher calls `colima ssh` / `colima status` to resolve the SSH agent socket and to check readiness, so Docker Desktop or other backends are not supported out of the box.
+- Colima should use the following config:
+
+  ```yaml
+  vmType: vz
+  mountType: virtiofs
+  forwardAgent: true
+  ```
+
+  If `mountType` is left on `sshfs`, `entire` can hang on the mounted workspace.
 
 ## Quick Start
 
@@ -26,7 +35,7 @@ agent
 - **Bind mount (`~/.agent-stack`)**: persists container-only agent settings on the host. `Codex` uses `~/.agent-stack/.codex`, `Claude` uses `~/.agent-stack/.claude`, so they stay separated from host-side `~/.codex` and `~/.claude`.
 - **Named volume (`agent-mise-data`)**: persists mise-installed runtimes across container recreations.
 - **gitconfig**: mounts host git config (read-only) so `git commit` and `git push` work inside the container.
-- **SSH agent**: the shell launcher resolves the forwarded agent socket from the Colima VM and mounts it into the container. Set `ssh.forwardAgent: true` in Colima so the forwarded agent is available.
+- **SSH agent**: the shell launcher resolves the forwarded agent socket from the Colima VM and mounts it into the container. Ensure `forwardAgent: true` is set in Colima so the forwarded agent is available.
 
 With preinstalled [sheldon](https://github.com/rossmacarthur/sheldon), optional shell plugins can be added in `~/.agent-stack/.sheldon/plugins.toml`. For example:
 
@@ -41,7 +50,7 @@ On first use, the plugin automatically creates `~/.agent-stack/.env`, `~/.agent-
 
 By default, `agent` does not mount the host Docker socket. Use `agent --docker` only when the container needs to run host Docker commands such as `docker build`, `docker run`, or `docker compose`.
 
-`agent` reads `SSH_AUTH_SOCK` from inside the Colima VM by calling `colima ssh`, then mounts that forwarded socket into the container. If you need SSH credentials inside the container, enable `ssh.forwardAgent: true` in Colima and restart Colima after changing the config.
+`agent` reads `SSH_AUTH_SOCK` from inside the Colima VM by calling `colima ssh`, then mounts that forwarded socket into the container. If you need SSH credentials inside the container, ensure `forwardAgent: true` is set in Colima and restart Colima after changing the config.
 
 You can pass a container command directly, for example `agent claude`, `agent codex`, or `agent zsh -lc 'uname -a'`.
 

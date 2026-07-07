@@ -5,6 +5,15 @@
 ## 前提条件
 
 - macOS + Docker バックエンドとして [Colima](https://github.com/abiosoft/colima) が起動していること。shell launcher は SSH agent socket の解決や起動確認のために `colima ssh` / `colima status` を呼び出すため、Docker Desktop など他のバックエンドは標準ではサポートしていません。
+- Colima は次の設定にしてください。
+
+  ```yaml
+  vmType: vz
+  mountType: virtiofs
+  forwardAgent: true
+  ```
+
+  `mountType` が `sshfs` のままだと、マウントした workspace 上で `entire` がハングすることがあります。
 
 [Claude Code](https://claude.ai/code), [Codex](https://github.com/openai/codex), [RTK](https://github.com/rtk-ai/rtk), [mise](https://mise.jdx.dev/), [APM](https://github.com/microsoft/apm), [entire](https://entire.io), [git-wt](https://github.com/k1LoW/git-wt) などをプリインストールした、AI エージェント開発向けコンテナです。
 
@@ -26,7 +35,7 @@ agent
 - **Bind mount (`~/.agent-stack`)**: コンテナ専用の設定をホスト側へ保持します。`Codex` は `~/.agent-stack/.codex`、`Claude` は `~/.agent-stack/.claude` を使うので、ホストの `~/.codex` や `~/.claude` と分離できます。
 - **Named volume (`agent-mise-data`)**: `mise` で入れたランタイムをコンテナ再作成後も保持します。
 - **gitconfig**: ホストの git 設定を read-only でマウントし、コンテナ内でも `git commit` や `git push` を使えるようにします。
-- **SSH agent**: Colima VM 内の forwarded agent socket を解決してコンテナへマウントします。Colima 側で `ssh.forwardAgent: true` を有効にしてください。
+- **SSH agent**: Colima VM 内の forwarded agent socket を解決してコンテナへマウントします。Colima 側で `forwardAgent: true` を設定してください。
 
 プリインストール済みの [sheldon](https://github.com/rossmacarthur/sheldon) を使うと、追加の shell plugin を `~/.agent-stack/.sheldon/plugins.toml` でユーザー側から管理できます。たとえば:
 
@@ -41,7 +50,7 @@ github = "Syati/entire-fzf"
 
 デフォルトではホストの Docker socket はマウントしません。コンテナ内からホスト Docker を使う必要がある場合だけ `agent --docker` を使ってください。
 
-`agent` は `colima ssh` を使って Colima VM 内の `SSH_AUTH_SOCK` を取得し、その forwarded socket をコンテナへマウントします。コンテナ内で SSH 認証が必要なら、Colima の `ssh.forwardAgent: true` を有効にし、設定変更後は Colima を再起動してください。
+`agent` は `colima ssh` を使って Colima VM 内の `SSH_AUTH_SOCK` を取得し、その forwarded socket をコンテナへマウントします。コンテナ内で SSH 認証が必要なら、Colima で `forwardAgent: true` を設定し、設定変更後は Colima を再起動してください。
 
 コンテナ内で実行するコマンドをそのまま渡せます。たとえば `agent claude` `agent codex` `agent zsh -lc 'uname -a'` のように使えます。
 
