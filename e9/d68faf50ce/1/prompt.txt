@@ -1,0 +1,6 @@
+readme に colima のconfigは以下にすることって書いたほうが良くない？
+vmType: vz
+
+mountType: virtiofs
+
+forwardAgent: true
