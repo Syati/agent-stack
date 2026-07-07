@@ -1,0 +1,2 @@
+@agent-stack.plugin.zsh で docker socket を共有したとしても以下のエラーで docker 内からhost os のdocker を操作できない
+I still can't reach Docker — /var/run/docker.sock is owned by root:991, and this session's user (agent, gid 1000) isn't a member of that group. There's no sudo, and no /etc/group entry for gid 991 to join. This looks like a host/container permission setup issue, not something I can fix from inside the sandbox.

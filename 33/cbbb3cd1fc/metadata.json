@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "33cbbb3cd1fc",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "docker/Dockerfile",
+    "docker/bin/agent-entrypoint"
+  ],
+  "sessions": [
+    {
+      "metadata": "/33/cbbb3cd1fc/0/metadata.json",
+      "transcript": "/33/cbbb3cd1fc/0/full.jsonl",
+      "content_hash": "/33/cbbb3cd1fc/0/content_hash.txt",
+      "prompt": "/33/cbbb3cd1fc/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 32,
+    "cache_creation_tokens": 39485,
+    "cache_read_tokens": 740707,
+    "output_tokens": 9080,
+    "api_call_count": 16
+  }
+}
