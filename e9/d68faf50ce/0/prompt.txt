@@ -1,0 +1,1 @@
+readme に colima vmType: vz mountType: virtiofs にすることを記載して。というのも entire が sshfs だとhang する。
