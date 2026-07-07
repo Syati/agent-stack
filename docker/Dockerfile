@@ -5,6 +5,7 @@ ARG CODEX_VERSION=0.142.4
 ARG GIT_WT_VERSION=0.29.0
 ARG AGENT_BROWSER_VERSION=0.31.1
 ARG SHELDON_VERSION=0.8.3
+ARG GOSU_VERSION=1.17
 ARG TARGETARCH
 
 ENV LANG=C.UTF-8
@@ -45,6 +46,16 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
       > /etc/apt/sources.list.d/docker.list \
     && apt-get update && apt-get install -y --no-install-recommends gh docker-ce-cli docker-compose-plugin \
     && rm -rf /var/lib/apt/lists/*
+
+# gosu (drops root back to agent after entrypoint fixes up docker.sock group)
+RUN case "${TARGETARCH}" in \
+      amd64) GOSU_ARCH="amd64" ;; \
+      arm64) GOSU_ARCH="arm64" ;; \
+      *) echo "Unsupported arch: ${TARGETARCH}" && exit 1 ;; \
+    esac \
+    && curl -fsSL "https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-${GOSU_ARCH}" \
+      -o /usr/local/bin/gosu \
+    && chmod +x /usr/local/bin/gosu
 
 # starship prompt
 RUN curl -fsSL https://starship.rs/install.sh | sh -s -- -y
@@ -140,6 +151,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends python3 python3
 USER agent
 RUN pip3 install --user --break-system-packages apm-cli
 
+USER root
 WORKDIR /workspace
 ENTRYPOINT ["/usr/local/bin/agent-entrypoint"]
 CMD ["sleep", "infinity"]

@@ -1,6 +1,22 @@
 #!/bin/sh
 set -eu
 
+fix_docker_socket_group() {
+  sock=/var/run/docker.sock
+  [ -S "$sock" ] || return 0
+
+  sock_gid=$(stat -c '%g' "$sock")
+  [ "$sock_gid" != "0" ] || return 0
+
+  group_name=$(getent group "$sock_gid" | cut -d: -f1)
+  if [ -z "$group_name" ]; then
+    group_name=docker-host
+    groupadd -g "$sock_gid" "$group_name"
+  fi
+
+  usermod -aG "$group_name" agent
+}
+
 start_tcp_bridges() {
   bridges=${AGENT_TCP_BRIDGES:-}
   if [ -z "$bridges" ]; then
@@ -36,6 +52,11 @@ start_tcp_bridges() {
     socat "TCP-LISTEN:${listen_port},bind=${listen_host},fork,reuseaddr" "TCP:${target_host}:${target_port}" &
   done
 }
+
+if [ "$(id -u)" = "0" ]; then
+  fix_docker_socket_group
+  exec gosu agent "$0" "$@"
+fi
 
 start_tcp_bridges
 exec "$@"
