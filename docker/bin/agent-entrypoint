@@ -17,6 +17,13 @@ fix_docker_socket_group() {
   usermod -aG "$group_name" agent
 }
 
+fix_mise_dirs() {
+  install -d -o agent -g agent /home/agent/.local
+  install -d -o agent -g agent /home/agent/.local/share
+  install -d -o agent -g agent /home/agent/.local/share/mise
+  chown -R agent:agent /home/agent/.local/share/mise
+}
+
 start_tcp_bridges() {
   bridges=${AGENT_TCP_BRIDGES:-}
   if [ -z "$bridges" ]; then
@@ -67,6 +74,7 @@ ensure_mise_tools() {
 
 if [ "$(id -u)" = "0" ]; then
   fix_docker_socket_group
+  fix_mise_dirs
   exec gosu agent "$0" "$@"
 fi
 

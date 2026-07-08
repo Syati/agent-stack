@@ -5,3 +5,7 @@ codex_home=${CODEX_HOME:-$HOME/.codex}
 
 [ -f "$claude_config_dir/RTK.md" ] || rtk init -g --auto-patch 2>/dev/null
 [ -f "$codex_home/RTK.md" ] || rtk init -g --codex 2>/dev/null
+
+if command -v mise >/dev/null 2>&1; then
+  eval "$(mise activate "${ZSH_VERSION:+zsh}${BASH_VERSION:+bash}")"
+fi
