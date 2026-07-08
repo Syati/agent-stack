@@ -1,0 +1,55 @@
+{
+  "cli_version": "0.8.0",
+  "checkpoint_id": "6f6c8c10f88d",
+  "session_id": "019f3ffc-64b8-7b41-bc3b-fd0c104c3de8",
+  "strategy": "manual-commit",
+  "created_at": "2026-07-08T05:01:58.743667662Z",
+  "branch": "agent/fix-mise-volume-permissions",
+  "checkpoints_count": 1,
+  "save_step_count": 1,
+  "files_touched": [
+    "docker/bin/agent-entrypoint"
+  ],
+  "agent": "Codex",
+  "model": "gpt-5.4",
+  "turn_id": "c5d100f2b00f",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 256402,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 1332480,
+    "output_tokens": 15870,
+    "api_call_count": 34
+  },
+  "session_metrics": {
+    "turn_count": 1
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-07-08T05:01:58.699231151Z",
+    "agent_lines": 8,
+    "agent_removed": 0,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 8,
+    "total_lines_changed": 8,
+    "agent_percentage": 100,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 8,
+      "agent_lines_removed": 0
+    }
+  ]
+}
