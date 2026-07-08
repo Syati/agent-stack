@@ -1,0 +1,11 @@
+commit push
+
+---
+
+zsh: command not found: fzf
+
+---
+
+Tool  Version            Source                      Requested
+fzf   0.74.0             ~/.config/mise/config.toml  latest
+node  23.11.1 (missing)  /workspace/.mise.toml       23
