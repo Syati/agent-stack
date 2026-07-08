@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.8.0",
+  "checkpoint_id": "d2d092b18909",
+  "strategy": "manual-commit",
+  "branch": "agent/fix-mise-volume-permissions",
+  "checkpoints_count": 2,
+  "files_touched": [
+    ".github/workflows/build-push.yml"
+  ],
+  "sessions": [
+    {
+      "metadata": "/d2/d092b18909/0/metadata.json",
+      "transcript": "/d2/d092b18909/0/full.jsonl",
+      "compact_transcript": "/d2/d092b18909/0/transcript.jsonl",
+      "content_hash": "/d2/d092b18909/0/content_hash.txt",
+      "prompt": "/d2/d092b18909/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 10573,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 145280,
+    "output_tokens": 1902,
+    "api_call_count": 9
+  }
+}
