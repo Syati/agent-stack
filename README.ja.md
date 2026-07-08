@@ -32,8 +32,8 @@ agent
 ```
 
 - **Docker socket**: ホストの Docker をコンテナ内から操作するために使います。`docker build` `docker run` `docker exec` などが必要なときだけ `agent --docker` を使ってください。
-- **Bind mount (`~/.agent-stack`)**: コンテナ専用の設定をホスト側へ保持します。`Codex` は `~/.agent-stack/.codex`、`Claude` は `~/.agent-stack/.claude` を使うので、ホストの `~/.codex` や `~/.claude` と分離できます。
-- **Named volume (`agent-mise-data`)**: `mise` で入れたランタイムをコンテナ再作成後も保持します。
+- **Bind mount (`~/.agent-stack`)**: コンテナ専用の設定をホスト側へ保持します。`Codex` は `~/.agent-stack/.codex`、`Claude` は `~/.agent-stack/.claude`、`mise` はグローバル設定と state を `~/.agent-stack/.mise` に置くので、ホスト側の dotfiles と分離できます。
+- **Named volume (`agent-mise-data`)**: `/home/agent/.local/share/mise` 配下の `mise` インストール実体をコンテナ再作成後も保持します。
 - **gitconfig**: ホストの git 設定を read-only でマウントし、コンテナ内でも `git commit` や `git push` を使えるようにします。
 - **SSH agent**: Colima VM 内の forwarded agent socket を解決してコンテナへマウントします。Colima 側で `forwardAgent: true` を設定してください。
 
@@ -46,7 +46,7 @@ shell = "zsh"
 github = "Syati/entire-fzf"
 ```
 
-初回実行時に `~/.agent-stack/.env` `~/.agent-stack/.claude` `~/.agent-stack/.codex` `~/.agent-stack/.chrome-agent` `~/.agent-stack/.sheldon/plugins.toml` を自動作成します。
+初回実行時に `~/.agent-stack/.env` `~/.agent-stack/.claude` `~/.agent-stack/.codex` `~/.agent-stack/.chrome-agent` `~/.agent-stack/.mise/state` `~/.agent-stack/.sheldon/plugins.toml` を自動作成します。
 
 デフォルトではホストの Docker socket はマウントしません。コンテナ内からホスト Docker を使う必要がある場合だけ `agent --docker` を使ってください。
 
@@ -108,18 +108,22 @@ AGENT_TCP_BRIDGES=127.0.0.1:64342->host.docker.internal:64342,127.0.0.1:9223->ho
 ```bash
 CODEX_HOME=/home/agent/.agent-stack/.codex
 CLAUDE_CONFIG_DIR=/home/agent/.agent-stack/.claude
+MISE_GLOBAL_CONFIG_FILE=/home/agent/.agent-stack/.mise/config.toml
+MISE_STATE_DIR=/home/agent/.agent-stack/.mise/state
 ```
 
-これにより、ホストの `~/.codex` や `~/.claude` と認証情報や設定を分離できます。初回起動時はコンテナ内で一度ログインしてください。Codex は `codex login --device-auth`、Claude Code は `claude` を起動して通常の対話ログインを完了すれば使えます。
+これにより、ホスト側の dotfiles から認証情報や設定を分離しつつ、`mise use -g ...` の結果も `agent-stack` 側に永続化できます。実際のツール実体は Docker named volume として `/home/agent/.local/share/mise` に残ります。初回起動時はコンテナ内で一度ログインしてください。Codex は `codex login --device-auth`、Claude Code は `claude` を起動して通常の対話ログインを完了すれば使えます。
 
 ## ローカルビルド
 
 ```bash
 git clone https://github.com/Syati/agent-stack.git
 cd agent-stack
-docker build -t agent-stack:local -f docker/Dockerfile .
+make build
 AGENT_STACK_IMAGE=agent-stack:local agent
 ```
+
+タグや Dockerfile を変えたい場合は Make 変数を上書きしてください。たとえば `make build IMAGE=agent-stack:dev` や `make build DOCKERFILE=docker/Dockerfile` のように使えます。
 
 ## agent-browser 連携
 

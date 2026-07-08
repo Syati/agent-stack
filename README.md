@@ -32,8 +32,8 @@ agent
 ```
 
 - **Docker socket**: allows the container to control host Docker (`docker build`, `docker run`, `docker exec`, etc.). Remove if not needed.
-- **Bind mount (`~/.agent-stack`)**: persists container-only agent settings on the host. `Codex` uses `~/.agent-stack/.codex`, `Claude` uses `~/.agent-stack/.claude`, so they stay separated from host-side `~/.codex` and `~/.claude`.
-- **Named volume (`agent-mise-data`)**: persists mise-installed runtimes across container recreations.
+- **Bind mount (`~/.agent-stack`)**: persists container-only agent settings on the host. `Codex` uses `~/.agent-stack/.codex`, `Claude` uses `~/.agent-stack/.claude`, and `mise` stores its global config and state under `~/.agent-stack/.mise`, so they stay separated from host-side dotfiles.
+- **Named volume (`agent-mise-data`)**: persists `mise`-installed tool payloads under `/home/agent/.local/share/mise` across container recreations.
 - **gitconfig**: mounts host git config (read-only) so `git commit` and `git push` work inside the container.
 - **SSH agent**: the shell launcher resolves the forwarded agent socket from the Colima VM and mounts it into the container. Ensure `forwardAgent: true` is set in Colima so the forwarded agent is available.
 
@@ -46,7 +46,7 @@ shell = "zsh"
 github = "Syati/entire-fzf"
 ```
 
-On first use, the plugin automatically creates `~/.agent-stack/.env`, `~/.agent-stack/.claude`, `~/.agent-stack/.codex`, `~/.agent-stack/.chrome-agent`, and `~/.agent-stack/.sheldon/plugins.toml`.
+On first use, the plugin automatically creates `~/.agent-stack/.env`, `~/.agent-stack/.claude`, `~/.agent-stack/.codex`, `~/.agent-stack/.chrome-agent`, `~/.agent-stack/.mise/state`, and `~/.agent-stack/.sheldon/plugins.toml`.
 
 By default, `agent` does not mount the host Docker socket. Use `agent --docker` only when the container needs to run host Docker commands such as `docker build`, `docker run`, or `docker compose`.
 
@@ -108,18 +108,22 @@ AGENT_TCP_BRIDGES=127.0.0.1:64342->host.docker.internal:64342,127.0.0.1:9223->ho
 ```bash
 CODEX_HOME=/home/agent/.agent-stack/.codex
 CLAUDE_CONFIG_DIR=/home/agent/.agent-stack/.claude
+MISE_GLOBAL_CONFIG_FILE=/home/agent/.agent-stack/.mise/config.toml
+MISE_STATE_DIR=/home/agent/.agent-stack/.mise/state
 ```
 
-This keeps container auth and settings separate from host-side `~/.codex` and `~/.claude`. On first launch, authenticate inside the container once to populate those directories. For Codex, use `codex login --device-auth`. For Claude Code, run `claude` and complete the normal interactive login flow.
+This keeps container auth and settings separate from host-side dotfiles while making `mise use -g ...` persistent in the agent stack. The installed tool payloads still live in the named Docker volume mounted at `/home/agent/.local/share/mise`. On first launch, authenticate inside the container once to populate those directories. For Codex, use `codex login --device-auth`. For Claude Code, run `claude` and complete the normal interactive login flow.
 
 ## Local Build
 
 ```bash
 git clone https://github.com/Syati/agent-stack.git
 cd agent-stack
-docker build -t agent-stack:local -f docker/Dockerfile .
+make build
 AGENT_STACK_IMAGE=agent-stack:local agent
 ```
+
+Need a different tag or Dockerfile? Override the Make variables, for example `make build IMAGE=agent-stack:dev` or `make build DOCKERFILE=docker/Dockerfile`.
 
 ## agent-browser Integration
 
