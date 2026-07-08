@@ -1,0 +1,5 @@
+profile.sh の mise activate だけど、mise activate zsh とかじゃないの？
+
+---
+
+"${ZSH_VERSION:+zsh}${BASH_VERSION:+bash}" この書き方って？
