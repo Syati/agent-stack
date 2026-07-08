@@ -1,2 +1,3 @@
 [tools]
+fzf = "latest"
 node = "23"

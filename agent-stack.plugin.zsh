@@ -33,7 +33,13 @@ _agent_ensure_home() {
   local stack_home
   stack_home=$(_agent_stack_home)
 
-  mkdir -p "${stack_home}/.claude" "${stack_home}/.codex" "${stack_home}/.chrome-agent" "${stack_home}/.sheldon"
+  mkdir -p \
+    "${stack_home}/.claude" \
+    "${stack_home}/.codex" \
+    "${stack_home}/.chrome-agent" \
+    "${stack_home}/.mise" \
+    "${stack_home}/.mise/state" \
+    "${stack_home}/.sheldon"
 
   if [[ ! -f "${stack_home}/.env" ]]; then
     touch "${stack_home}/.env"
@@ -172,6 +178,8 @@ _agent_run() {
     ${ssh_agent_args[@]} \
     -e CODEX_HOME=/home/agent/.agent-stack/.codex \
     -e CLAUDE_CONFIG_DIR=/home/agent/.agent-stack/.claude \
+    -e MISE_GLOBAL_CONFIG_FILE=/home/agent/.agent-stack/.mise/config.toml \
+    -e MISE_STATE_DIR=/home/agent/.agent-stack/.mise/state \
     --add-host host.docker.internal:host-gateway \
     "${image}" "${container_cmd[@]}"
 }

@@ -53,10 +53,23 @@ start_tcp_bridges() {
   done
 }
 
+ensure_mise_tools() {
+  if ! command -v mise >/dev/null 2>&1; then
+    return 0
+  fi
+
+  if mise which fzf >/dev/null 2>&1; then
+    return 0
+  fi
+
+  mise use -g fzf@latest >/dev/null
+}
+
 if [ "$(id -u)" = "0" ]; then
   fix_docker_socket_group
   exec gosu agent "$0" "$@"
 fi
 
 start_tcp_bridges
+ensure_mise_tools
 exec "$@"
