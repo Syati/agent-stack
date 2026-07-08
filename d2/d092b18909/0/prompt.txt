@@ -1,9 +1,1 @@
-commit push
-
----
-
-あと build-push.yml だけど、compose.yml ってもうないよね
-
----
-
 修正して comit push pr \wo
