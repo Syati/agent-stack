@@ -31,6 +31,13 @@ Source the plugin in your `~/.zshrc`:
 source /path/to/agent-stack/agent-stack.plugin.zsh
 ```
 
+If you manage shell plugins with [sheldon](https://github.com/rossmacarthur/sheldon), add it to `~/.config/sheldon/plugins.toml` instead:
+
+```toml
+[plugins.agent-stack]
+local = "/path/to/agent-stack/agent-stack.plugin.zsh"
+```
+
 Then start a container from the current directory:
 
 ```bash

@@ -31,6 +31,13 @@
 source /path/to/agent-stack/agent-stack.plugin.zsh
 ```
 
+[sheldon](https://github.com/rossmacarthur/sheldon) で shell plugin を管理している場合は、代わりに `~/.config/sheldon/plugins.toml` へ追加してください。
+
+```toml
+[plugins.agent-stack]
+local = "/path/to/agent-stack/agent-stack.plugin.zsh"
+```
+
 その後、現在のディレクトリをマウントしてコンテナを起動します。
 
 ```bash
