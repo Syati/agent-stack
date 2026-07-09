@@ -1,5 +1,1 @@
-commit push
-
----
-
 local ではなく github のほうがいいでしょ
