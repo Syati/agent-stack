@@ -1,17 +1,1 @@
-今してることってapple container でも同じ事できる？
-
----
-
-はやい？
-
----
-
-してみてください
-
----
-
-今の構成で十分か
-
----
-
-readme に sheldon で install する場合が書いてないね
+commit push
