@@ -35,7 +35,8 @@ source /path/to/agent-stack/agent-stack.plugin.zsh
 
 ```toml
 [plugins.agent-stack]
-local = "/path/to/agent-stack/agent-stack.plugin.zsh"
+github = "Syati/agent-stack"
+use = ["agent-stack.plugin.zsh"]
 ```
 
 その後、現在のディレクトリをマウントしてコンテナを起動します。

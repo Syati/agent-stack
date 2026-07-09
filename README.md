@@ -35,7 +35,8 @@ If you manage shell plugins with [sheldon](https://github.com/rossmacarthur/shel
 
 ```toml
 [plugins.agent-stack]
-local = "/path/to/agent-stack/agent-stack.plugin.zsh"
+github = "Syati/agent-stack"
+use = ["agent-stack.plugin.zsh"]
 ```
 
 Then start a container from the current directory:
