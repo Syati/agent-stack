@@ -21,3 +21,5 @@ if command -v fzf >/dev/null 2>&1; then
 fi
 export _ZO_DATA_DIR="$HOME/.agent-stack/.zoxide"
 eval "$(zoxide init zsh)"
+
+[[ -f "$HOME/.agent-stack/.zshrc.local" ]] && source "$HOME/.agent-stack/.zshrc.local"

@@ -98,6 +98,8 @@ shell = "zsh"
 github = "Syati/entire-fzf"
 ```
 
+それ以外（alias、環境変数、任意の shell 設定など）は `~/.agent-stack/.zshrc.local` や `~/.agent-stack/.bashrc.local` を置いてください。存在すれば `.zshrc` / `.bashrc` の末尾で自動的に source されます。
+
 ## コンテナユーザー
 
 非 root ユーザー `agent` で動作します。ホームディレクトリは `/home/agent`、シェルは `zsh` です。イメージのデフォルト作業ディレクトリは `/workspace` ですが、`agent` launcher 経由では実行時に現在のディレクトリ (`$(pwd)`) を作業ディレクトリとして使います。

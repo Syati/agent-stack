@@ -112,6 +112,7 @@ RUN git config --system --add safe.directory /workspace \
 COPY docker/profile.sh /home/agent/.profile.sh
 COPY docker/.zshrc /home/agent/.zshrc
 RUN echo '. ~/.profile.sh' >> /home/agent/.bashrc
+RUN echo '[ -f "$HOME/.agent-stack/.bashrc.local" ] && . "$HOME/.agent-stack/.bashrc.local"' >> /home/agent/.bashrc
 USER agent
 WORKDIR /home/agent
 

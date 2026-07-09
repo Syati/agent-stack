@@ -98,6 +98,8 @@ shell = "zsh"
 github = "Syati/entire-fzf"
 ```
 
+For anything else (aliases, env vars, arbitrary shell config), drop a `~/.agent-stack/.zshrc.local` and/or `~/.agent-stack/.bashrc.local` — they're sourced automatically at the end of `.zshrc` / `.bashrc` if present.
+
 ## Container User
 
 Runs as non-root user `agent` (home: `/home/agent`, shell: `zsh`). The image default working directory is `/workspace`, but the `agent` launcher overrides it at runtime to the current directory (`$(pwd)`).
