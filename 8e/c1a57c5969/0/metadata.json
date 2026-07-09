@@ -1,0 +1,63 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "8ec1a57c5969",
+  "session_id": "ba7d225f-4bd6-4005-bac5-b1b852ce2eea",
+  "strategy": "manual-commit",
+  "created_at": "2026-07-09T06:10:56.224139Z",
+  "branch": "main",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "README.ja.md",
+    "README.md",
+    "docker/.zshrc",
+    "docker/Dockerfile"
+  ],
+  "agent": "Claude Code",
+  "model": "",
+  "turn_id": "4544ae18b8f5",
+  "token_usage": {
+    "input_tokens": 4285,
+    "cache_creation_tokens": 30252,
+    "cache_read_tokens": 757972,
+    "output_tokens": 7902,
+    "api_call_count": 19
+  },
+  "session_metrics": {
+    "turn_count": 3
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-07-09T06:10:56.220101Z",
+    "agent_lines": 7,
+    "agent_removed": 0,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 7,
+    "total_lines_changed": 7,
+    "agent_percentage": 100,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 3,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 7,
+      "agent_lines_removed": 0
+    }
+  ]
+}
