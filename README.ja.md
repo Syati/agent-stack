@@ -17,6 +17,12 @@
 
 [Claude Code](https://claude.ai/code), [Codex](https://github.com/openai/codex), [RTK](https://github.com/rtk-ai/rtk), [mise](https://mise.jdx.dev/), [APM](https://github.com/microsoft/apm), [entire](https://entire.io), [git-wt](https://github.com/k1LoW/git-wt) などをプリインストールした、AI エージェント開発向けコンテナです。
 
+## 概要
+
+- プロジェクトのディレクトリで `agent` を実行すると、そのままコンテナに入れます。
+- コンテナからホスト Docker を操作したいときだけ `agent --docker` を使います。
+- コンテナ専用の設定や認証情報は `~/.agent-stack` に分離して保持します。
+
 ## クイックスタート
 
 まず `~/.zshrc` で plugin を読み込みます。
@@ -31,11 +37,49 @@ source /path/to/agent-stack/agent-stack.plugin.zsh
 agent
 ```
 
-- **Docker socket**: ホストの Docker をコンテナ内から操作するために使います。`docker build` `docker run` `docker exec` などが必要なときだけ `agent --docker` を使ってください。
-- **Bind mount (`~/.agent-stack`)**: コンテナ専用の設定をホスト側へ保持します。`Codex` は `~/.agent-stack/.codex`、`Claude` は `~/.agent-stack/.claude`、`mise` はグローバル設定と state を `~/.agent-stack/.mise` に置くので、ホスト側の dotfiles と分離できます。
-- **Named volume (`agent-mise-data`)**: `/home/agent/.local/share/mise` 配下の `mise` インストール実体をコンテナ再作成後も保持します。
-- **gitconfig**: ホストの git 設定を read-only でマウントし、コンテナ内でも `git commit` や `git push` を使えるようにします。
-- **SSH agent**: Colima VM 内の forwarded agent socket を解決してコンテナへマウントします。Colima 側で `forwardAgent: true` を設定してください。
+- `agent` は現在のディレクトリをホストと同じ絶対パスに bind mount し、さらに `-w "$(pwd)"` でそのパスを作業ディレクトリにします。
+- これは `agent --docker` でホストの Docker socket を渡したときに、コンテナ内で実行した `docker run` や `docker build` でも、bind mount と build context のパス解決が最終的にホスト側 Docker daemon で行われるためです。
+- コンテナ内のパスがホストとずれると、存在しないパスを参照したり、誤った build context を使ったりします。
+
+必要なら対話シェルではなくコマンドを直接渡せます。
+
+```bash
+agent codex
+agent claude
+agent zsh -lc 'uname -a'
+```
+
+## 実行時の挙動
+
+- `agent --docker` は `/var/run/docker.sock` をマウントし、コンテナからホスト Docker を操作可能にします。
+- デフォルトでは Docker socket はマウントしません。必要なときだけ `agent --docker` を使ってください。
+- launcher は `colima ssh` で Colima VM 内の `SSH_AUTH_SOCK` を解決し、その forwarded socket をコンテナへマウントします。
+- 複数インスタンスを並行起動できます。同じリポジトリを複数エージェントで触る場合は [git-wt](https://github.com/k1LoW/git-wt) の worktree を使うのが安全です。
+
+## 永続化されるデータ
+
+- `~/.agent-stack` にコンテナ専用の設定と認証状態を保持します。
+- `~/.agent-stack/.codex` は `CODEX_HOME` として使います。
+- `~/.agent-stack/.claude` は `CLAUDE_CONFIG_DIR` として使います。
+- `~/.agent-stack/.mise` に `mise` のグローバル設定と state を置きます。
+- `agent-mise-data` で `/home/agent/.local/share/mise` 配下の `mise` インストール実体をコンテナ再作成後も保持します。
+- ホストの `~/.gitconfig` は read-only でマウントされ、コンテナ内でも `git commit` や `git push` を使えます。
+
+初回実行時には次のパスを自動作成します。
+
+```text
+~/.agent-stack/.env
+~/.agent-stack/.claude
+~/.agent-stack/.codex
+~/.agent-stack/.chrome-agent
+~/.agent-stack/.mise/state
+~/.agent-stack/.sheldon/plugins.toml
+```
+
+初回起動後はコンテナ内で一度ログインしてください。
+
+- Codex: `codex login --device-auth`
+- Claude Code: `claude` を起動して通常の対話ログインを完了
 
 プリインストール済みの [sheldon](https://github.com/rossmacarthur/sheldon) を使うと、追加の shell plugin を `~/.agent-stack/.sheldon/plugins.toml` でユーザー側から管理できます。たとえば:
 
@@ -46,19 +90,9 @@ shell = "zsh"
 github = "Syati/entire-fzf"
 ```
 
-初回実行時に `~/.agent-stack/.env` `~/.agent-stack/.claude` `~/.agent-stack/.codex` `~/.agent-stack/.chrome-agent` `~/.agent-stack/.mise/state` `~/.agent-stack/.sheldon/plugins.toml` を自動作成します。
-
-デフォルトではホストの Docker socket はマウントしません。コンテナ内からホスト Docker を使う必要がある場合だけ `agent --docker` を使ってください。
-
-`agent` は `colima ssh` を使って Colima VM 内の `SSH_AUTH_SOCK` を取得し、その forwarded socket をコンテナへマウントします。コンテナ内で SSH 認証が必要なら、Colima で `forwardAgent: true` を設定し、設定変更後は Colima を再起動してください。
-
-コンテナ内で実行するコマンドをそのまま渡せます。たとえば `agent claude` `agent codex` `agent zsh -lc 'uname -a'` のように使えます。
-
-複数インスタンスの並行起動も可能です。`agent` を呼ぶたびに独立したコンテナが立ち上がるため、複数エージェントで同じリポジトリを触る場合は [git-wt](https://github.com/k1LoW/git-wt) の worktree を使うのが安全です。
-
 ## コンテナユーザー
 
-非 root ユーザー `agent` で動作します。ホームディレクトリは `/home/agent`、シェルは `zsh`、作業ディレクトリは `/workspace` です。
+非 root ユーザー `agent` で動作します。ホームディレクトリは `/home/agent`、シェルは `zsh` です。イメージのデフォルト作業ディレクトリは `/workspace` ですが、`agent` launcher 経由では実行時に現在のディレクトリ (`$(pwd)`) を作業ディレクトリとして使います。
 
 ## 同梱ツール
 

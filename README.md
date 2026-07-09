@@ -17,6 +17,12 @@ AI agent development container with [Claude Code](https://claude.ai/code), [Code
 
   If `mountType` is left on `sshfs`, `entire` can hang on the mounted workspace.
 
+## Overview
+
+- Start from your current project directory with `agent`.
+- Add `agent --docker` only when the container must control host Docker.
+- Container-only state lives under `~/.agent-stack`, separate from host dotfiles.
+
 ## Quick Start
 
 Source the plugin in your `~/.zshrc`:
@@ -31,11 +37,49 @@ Then start a container from the current directory:
 agent
 ```
 
-- **Docker socket**: allows the container to control host Docker (`docker build`, `docker run`, `docker exec`, etc.). Remove if not needed.
-- **Bind mount (`~/.agent-stack`)**: persists container-only agent settings on the host. `Codex` uses `~/.agent-stack/.codex`, `Claude` uses `~/.agent-stack/.claude`, and `mise` stores its global config and state under `~/.agent-stack/.mise`, so they stay separated from host-side dotfiles.
-- **Named volume (`agent-mise-data`)**: persists `mise`-installed tool payloads under `/home/agent/.local/share/mise` across container recreations.
-- **gitconfig**: mounts host git config (read-only) so `git commit` and `git push` work inside the container.
-- **SSH agent**: the shell launcher resolves the forwarded agent socket from the Colima VM and mounts it into the container. Ensure `forwardAgent: true` is set in Colima so the forwarded agent is available.
+- `agent` bind-mounts the current directory at the same absolute path on the host and sets `-w "$(pwd)"` so the container starts there.
+- This is intentional: when `agent --docker` exposes the host Docker socket, `docker run` and `docker build` executed inside the container still have their bind-mount paths and build contexts resolved by the host Docker daemon.
+- If the in-container path differs from the host path, nested Docker commands can target a non-existent path or the wrong build context.
+
+Run a tool directly instead of starting an interactive shell when needed:
+
+```bash
+agent codex
+agent claude
+agent zsh -lc 'uname -a'
+```
+
+## Runtime Behavior
+
+- `agent --docker` mounts `/var/run/docker.sock` so the container can control host Docker.
+- By default, the host Docker socket is not mounted. Use `agent --docker` only when needed.
+- The launcher resolves `SSH_AUTH_SOCK` from inside the Colima VM via `colima ssh` and mounts the forwarded socket into the container.
+- Multiple instances can run in parallel. If several agents work on the same repo, use [git-wt](https://github.com/k1LoW/git-wt) worktrees to avoid conflicts.
+
+## Persistent Data
+
+- `~/.agent-stack` stores container-only settings and auth state.
+- `~/.agent-stack/.codex` is used as `CODEX_HOME`.
+- `~/.agent-stack/.claude` is used as `CLAUDE_CONFIG_DIR`.
+- `~/.agent-stack/.mise` stores global `mise` config and state.
+- `agent-mise-data` keeps installed `mise` tool payloads under `/home/agent/.local/share/mise` across container recreations.
+- Host `~/.gitconfig` is mounted read-only so `git commit` and `git push` work inside the container.
+
+On first use, the plugin automatically creates these paths:
+
+```text
+~/.agent-stack/.env
+~/.agent-stack/.claude
+~/.agent-stack/.codex
+~/.agent-stack/.chrome-agent
+~/.agent-stack/.mise/state
+~/.agent-stack/.sheldon/plugins.toml
+```
+
+Authenticate once inside the container to populate them:
+
+- Codex: `codex login --device-auth`
+- Claude Code: run `claude` and complete the normal interactive login flow
 
 With preinstalled [sheldon](https://github.com/rossmacarthur/sheldon), optional shell plugins can be added in `~/.agent-stack/.sheldon/plugins.toml`. For example:
 
@@ -46,19 +90,9 @@ shell = "zsh"
 github = "Syati/entire-fzf"
 ```
 
-On first use, the plugin automatically creates `~/.agent-stack/.env`, `~/.agent-stack/.claude`, `~/.agent-stack/.codex`, `~/.agent-stack/.chrome-agent`, `~/.agent-stack/.mise/state`, and `~/.agent-stack/.sheldon/plugins.toml`.
-
-By default, `agent` does not mount the host Docker socket. Use `agent --docker` only when the container needs to run host Docker commands such as `docker build`, `docker run`, or `docker compose`.
-
-`agent` reads `SSH_AUTH_SOCK` from inside the Colima VM by calling `colima ssh`, then mounts that forwarded socket into the container. If you need SSH credentials inside the container, ensure `forwardAgent: true` is set in Colima and restart Colima after changing the config.
-
-You can pass a container command directly, for example `agent claude`, `agent codex`, or `agent zsh -lc 'uname -a'`.
-
-Multiple instances can run in parallel. Each `agent` call creates a separate container, so [git-wt](https://github.com/k1LoW/git-wt) worktrees are still the safest way to avoid file conflicts when several agents work on the same repo.
-
 ## Container User
 
-Runs as non-root user `agent` (home: `/home/agent`, shell: `zsh`). Working directory is `/workspace`.
+Runs as non-root user `agent` (home: `/home/agent`, shell: `zsh`). The image default working directory is `/workspace`, but the `agent` launcher overrides it at runtime to the current directory (`$(pwd)`).
 
 ## What's Inside
 
