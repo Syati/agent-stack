@@ -1,0 +1,81 @@
+plugins.zsh で agent update できるのはいいんだけど、plugin 側の修正は、 sheldon lock --update するのがわずわらしいんだけどどうすればいい？
+
+---
+
+いやagent-stack 利用者は、agent update で zsh plugin 側もアップデートしたいとおもうけど
+
+---
+
+sheldon は相性わるいってこと？
+
+---
+
+はじめ plugin install するのめんどくさくない？
+
+---
+
+まずプラグインの導入として sheldon は楽だよね？
+
+---
+
+agent update で sheldon lock --update 自身のパッケージ とかないの？
+
+---
+
+sheldon によせたいけど、どうおもう？
+
+---
+
+core をぶんりするってどういうこと？
+
+---
+
+ホストOSにインストールすることを考えると、一変にupdateになるね
+
+---
+
+sheldon lock --update \ga
+
+---
+
+全部update してしまうってことぐらいですね
+
+---
+
+そうしましょう
+
+---
+
+plugin.zsh の update だけでいいじゃない？　ホストos が agent-stack をインストールして、project dir にたいして、 agent を起動する。つまり、docker環境では、plugin.zsh は不要でしょ
+
+---
+
+```bash
+sheldon --config-dir ~/.agent-stack/.sheldon add agent-stack \
+  --github Syati/agent-stack \
+  --use agent-stack.plugin.zsh
+```
+ってかいてるけど、host はすでに sheldon いれてるからいらないんじゃない？
+
+---
+
+しゅうせいして
+
+---
+
+sheldon --config-dir ~/.agent-stack/.sheldon add agent-stack \ なんで config dir を指定する？
+
+---
+
+export SHELDON_CONFIG_DIR="$HOME/.agent-stack/.sheldon"
+export SHELDON_DATA_DIR="$HOME/.agent-stack/.sheldon"
+eval "$(sheldon source)"
+これは面倒くさいでしょ。 host os で sheldon add して パスが通ったら agent で起動できるのが一番いいでしょ
+
+---
+
+sheldon add では update できない？
+
+---
+
+sheldon つかうなってことだよね。 go で bin でもつくったほうがいいってことだよね
