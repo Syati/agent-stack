@@ -13,6 +13,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # System packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    autoconf \
+    bison \
     build-essential \
     ca-certificates \
     curl \
@@ -20,12 +22,24 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git-lfs \
     grep \
     jq \
+    libdb-dev \
+    libffi-dev \
+    libgdbm-dev \
+    libgmp-dev \
+    libncurses5-dev \
+    libreadline-dev \
+    libssl-dev \
+    libyaml-dev \
     locales \
     openssh-client \
+    pkg-config \
     ripgrep \
+    rustc \
     socat \
     tree \
     unzip \
+    uuid-dev \
+    zlib1g-dev \
     zoxide \
     zsh \
     zsh-autosuggestions \
@@ -111,6 +125,9 @@ RUN git config --system --add safe.directory /workspace \
     && useradd -m -s /bin/zsh agent
 COPY docker/profile.sh /home/agent/.profile.sh
 COPY docker/.zshrc /home/agent/.zshrc
+RUN echo '. ~/.profile.sh' >> /home/agent/.profile
+RUN echo '[ -f "$HOME/.agent-stack/.profile.local" ] && . "$HOME/.agent-stack/.profile.local"' >> /home/agent/.profile
+RUN echo '. ~/.profile' >> /home/agent/.bash_profile
 RUN echo '. ~/.profile.sh' >> /home/agent/.bashrc
 RUN echo '[ -f "$HOME/.agent-stack/.bashrc.local" ] && . "$HOME/.agent-stack/.bashrc.local"' >> /home/agent/.bashrc
 USER agent
