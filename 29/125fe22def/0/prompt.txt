@@ -1,0 +1,46 @@
+ruby を入れたくて以下を実施したがエラーになる
+mise use ruby
+mise WARN  precompiled ruby will be the default in 2026.8.0.
+To use precompiled binaries now: mise settings ruby.compile=false
+To keep compiling from source: mise settings ruby.compile=true
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100 14.5M  100 14.5M    0     0  17.0M      0 --:--:-- --:--:-- --:--:-- 17.0M
+BUILD FAILED (Debian GNU/Linux 13 on aarch64 using ruby-build 20260701)
+You can inspect the build directory at /tmp/ruby-build.20260710060611.5375.iUA9Ao
+See the full build log at /tmp/ruby-build.20260710060611.5375.log
+mise ERROR ~/.cache/mise/ruby/ruby-build/bin/ruby-build failed
+==> Downloading openssl-3.0.20.tar.gz...
+-> curl -q -fL -o openssl-3.0.20.tar.gz https://github.com/openssl/openssl/releases/download/openssl-3.0.20/openssl-3.0.20.tar.gz
+==> Installing openssl-3.0.20...
+-> ./config "--prefix=$HOME/.local/share/mise/installs/ruby/4.0.5/openssl" "--openssldir=$HOME/.local/share/mise/installs/ruby/4.0.5/openssl/ssl" --libdir=lib zlib-dynamic no-ssl3 shared "-Wl,-rpath,$HOME/.local/share/mise/installs/ruby/4.0.5/openssl/lib"
+-> make -j 4
+ruby@4.0.5      -> make -j 4                                                                                                                                                                                         ◟
+mise ERROR Failed to install core:ruby@latest: ~/.cache/mise/ruby/ruby-build/bin/ruby-build exited with non-zero status: exit code 1
+mise ERROR Version: 2026.7.3 linux-arm64 (2026-07-08)
+mise ERROR Run with --verbose or MISE_VERBOSE=1 for more information
+
+---
+
+precomipled つかうとして、 今後のことを考えると libssl とかいれたほうがいいじゃないかな？
+
+---
+
+dockerfile にくわてください
+
+---
+
+検証してください
+
+---
+
+docker いれたほうがいい？ 基本hostOSを貰う予定だけど
+
+---
+
+もう一度実行して、 socket をつなげたので。
+
+---
+
+そこもなおしてください
