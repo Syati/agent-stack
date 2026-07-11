@@ -158,6 +158,8 @@ MISE_STATE_DIR=/home/agent/.agent-stack/.mise/state
 
 This keeps container auth and settings separate from host-side dotfiles while making `mise use -g ...` persistent in the agent stack. The installed tool payloads still live in the named Docker volume mounted at `/home/agent/.local/share/mise`. On first launch, authenticate inside the container once to populate those directories. For Codex, use `codex login --device-auth`. For Claude Code, run `claude` and complete the normal interactive login flow.
 
+The bundled global `mise` config also enables `idiomatic_version_file_enable_tools = ["ruby"]` by default and pins `settings.ruby.compile = false`, so Ruby projects can pick up idiomatic version files without extra setup while preferring prebuilt installs.
+
 ## Local Build
 
 ```bash

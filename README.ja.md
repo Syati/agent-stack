@@ -158,6 +158,8 @@ MISE_STATE_DIR=/home/agent/.agent-stack/.mise/state
 
 これにより、ホスト側の dotfiles から認証情報や設定を分離しつつ、`mise use -g ...` の結果も `agent-stack` 側に永続化できます。実際のツール実体は Docker named volume として `/home/agent/.local/share/mise` に残ります。初回起動時はコンテナ内で一度ログインしてください。Codex は `codex login --device-auth`、Claude Code は `claude` を起動して通常の対話ログインを完了すれば使えます。
 
+同梱のグローバル `mise` 設定では、Ruby プロジェクトが追加設定なしで idiomatic な version file を読めるように `idiomatic_version_file_enable_tools = ["ruby"]` を既定で有効にし、あわせて `settings.ruby.compile = false` を固定して prebuilt install を優先するようにしています。
+
 ## ローカルビルド
 
 ```bash
